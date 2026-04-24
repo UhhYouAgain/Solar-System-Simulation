@@ -3,1477 +3,379 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kozmosi — Simulim i Sistemit Diellor</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<title>KOZMOSI — Sistemi Diellor</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
 <style>
-/* =============================================
-   CUSTOM PROPERTIES & RESET
-============================================= */
 :root {
-  --bg-deep:    #020510;
-  --bg-mid:     #050d1f;
-  --bg-panel:   rgba(8,18,40,0.92);
-  --cyan:       #00e5ff;
-  --cyan-dim:   rgba(0,229,255,0.15);
-  --cyan-glow:  rgba(0,229,255,0.4);
-  --gold:       #ffc940;
-  --gold-dim:   rgba(255,201,64,0.15);
-  --orange:     #ff6b35;
-  --purple:     #7c3aed;
-  --purple-dim: rgba(124,58,237,0.2);
-  --red:        #ff3860;
-  --green:      #00e676;
-  --text:       #c8d8ec;
-  --text-dim:   #5a7290;
-  --white:      #eaf2ff;
-  --border:     rgba(0,229,255,0.12);
-  --border-hot: rgba(0,229,255,0.4);
-  --font-display: 'Orbitron', monospace;
-  --font-body:    'Exo 2', sans-serif;
-  --font-mono:    'Space Mono', monospace;
-  --radius:     12px;
-  --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+  --bg: #060a14;
+  --bg2: #0a1020;
+  --panel: rgba(10,16,32,0.96);
+  --border: rgba(80,140,255,0.18);
+  --border2: rgba(80,140,255,0.4);
+  --cyan: #4af0ff;
+  --cyan2: rgba(74,240,255,0.12);
+  --gold: #ffd060;
+  --gold2: rgba(255,208,96,0.12);
+  --purple: #a78bfa;
+  --red: #ff5577;
+  --green: #4fffb0;
+  --text: #b8cde8;
+  --textd: #4a6080;
+  --white: #e8f2ff;
+  --r: 10px;
 }
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-weight:400;line-height:1.6;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(74,240,255,0.2);border-radius:3px}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; overflow-x: hidden; }
-body {
-  background: var(--bg-deep);
-  color: var(--text);
-  font-family: var(--font-body);
-  font-weight: 300;
-  line-height: 1.7;
-  overflow-x: hidden;
-}
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-deep); }
-::-webkit-scrollbar-thumb { background: var(--cyan-dim); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
+/* ── STAR BG ── */
+#starfield{position:fixed;inset:0;z-index:0;pointer-events:none}
 
-/* =============================================
-   STAR CANVAS BACKGROUND
-============================================= */
-#star-canvas {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-}
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(1rem,4vw,3rem);background:rgba(6,10,20,0.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:background .3s}
+.logo{font-family:'Orbitron',monospace;font-weight:900;font-size:1.05rem;color:var(--cyan);letter-spacing:.18em;display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo-orb{width:28px;height:28px;border-radius:50%;background:conic-gradient(from 0deg,var(--cyan),var(--purple),var(--gold),var(--cyan));animation:spin 8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+nav ul{display:flex;gap:1.8rem;list-style:none}
+nav ul a{font-family:'Orbitron',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--textd);text-decoration:none;transition:color .25s;position:relative}
+nav ul a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--cyan);transition:width .3s}
+nav ul a:hover{color:var(--cyan)}
+nav ul a:hover::after{width:100%}
+.nav-btn{font-family:'Orbitron',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;padding:8px 22px;border:1px solid var(--cyan);border-radius:5px;background:transparent;color:var(--cyan);cursor:pointer;text-decoration:none;transition:all .25s}
+.nav-btn:hover{background:var(--cyan);color:var(--bg)}
+@media(max-width:800px){nav ul{display:none}}
 
-/* =============================================
-   NAVIGATION
-============================================= */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 clamp(1.5rem, 5vw, 4rem);
-  height: 70px;
-  background: rgba(2,5,16,0.85);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-  transition: background var(--transition);
-}
-.nav-logo {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--cyan);
-  letter-spacing: 0.15em;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.nav-logo-icon {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: conic-gradient(from 0deg, var(--cyan), var(--purple), var(--orange), var(--cyan));
-  animation: spin 10s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.nav-links {
-  display: flex;
-  gap: 2rem;
-  list-style: none;
-}
-.nav-links a {
-  font-family: var(--font-display);
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  color: var(--text-dim);
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: color var(--transition);
-  position: relative;
-}
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  bottom: -4px; left: 0;
-  width: 0; height: 1px;
-  background: var(--cyan);
-  transition: width var(--transition);
-}
-.nav-links a:hover { color: var(--cyan); }
-.nav-links a:hover::after { width: 100%; }
-.nav-cta {
-  background: transparent;
-  border: 1px solid var(--cyan);
-  color: var(--cyan);
-  font-family: var(--font-display);
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  padding: 8px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all var(--transition);
-  text-decoration: none;
-}
-.nav-cta:hover {
-  background: var(--cyan);
-  color: var(--bg-deep);
-  box-shadow: 0 0 20px var(--cyan-glow);
-}
+/* ── HERO ── */
+#hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:clamp(2rem,8vw,5rem) clamp(1rem,5vw,4rem);z-index:1;overflow:hidden}
+.nebula{position:absolute;border-radius:50%;pointer-events:none;filter:blur(80px)}
+.neb1{width:700px;height:700px;top:-200px;left:-150px;background:radial-gradient(circle,rgba(124,58,237,.1) 0%,transparent 70%);animation:drift 22s ease-in-out infinite alternate}
+.neb2{width:500px;height:500px;bottom:-100px;right:-100px;background:radial-gradient(circle,rgba(74,240,255,.07) 0%,transparent 70%);animation:drift2 28s ease-in-out infinite alternate}
+@keyframes drift{0%{transform:translate(0,0)}100%{transform:translate(50px,30px)}}
+@keyframes drift2{0%{transform:translate(0,0)}100%{transform:translate(-40px,50px)}}
 
-/* =============================================
-   HERO SECTION
-============================================= */
-#hero {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-  padding: clamp(2rem, 10vw, 6rem) clamp(1.5rem, 5vw, 4rem);
-  overflow: hidden;
-  z-index: 1;
-}
+/* hero floating planets */
+.hplanet{position:absolute;border-radius:50%;pointer-events:none}
+.hp1{width:160px;height:160px;top:10%;right:7%;background:radial-gradient(circle at 35% 35%,#c2700a,#5a2000);box-shadow:0 0 50px rgba(180,90,0,.25);animation:flt 13s ease-in-out infinite}
+.hp2{width:70px;height:70px;bottom:22%;left:5%;background:radial-gradient(circle at 35% 35%,#60a0fa,#1030a0);box-shadow:0 0 30px rgba(80,140,250,.3);animation:flt2 9s ease-in-out infinite}
+.hp3{width:44px;height:44px;top:28%;left:4%;background:radial-gradient(circle at 40% 35%,#9af0c0,#0a5040);box-shadow:0 0 20px rgba(100,220,160,.25);animation:flt 7.5s ease-in-out infinite reverse}
+.hp4{width:110px;height:110px;bottom:28%;right:4%;background:radial-gradient(circle at 38% 33%,#fde080,#c06000);box-shadow:0 0 35px rgba(240,180,0,.2);animation:flt2 16s ease-in-out infinite}
+.hp4::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-22deg);width:175px;height:36px;border:5px solid rgba(253,220,100,.18);border-radius:50%}
+@keyframes flt{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-18px) rotate(4deg)}}
+@keyframes flt2{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-14px) rotate(-6deg)}}
 
-/* Nebula background layers */
-.nebula-1 {
-  position: absolute;
-  width: 800px; height: 800px;
-  top: -200px; left: -200px;
-  background: radial-gradient(ellipse at center, rgba(124,58,237,0.12) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: drift1 20s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-.nebula-2 {
-  position: absolute;
-  width: 600px; height: 600px;
-  bottom: -100px; right: -100px;
-  background: radial-gradient(ellipse at center, rgba(0,229,255,0.08) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: drift2 25s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-.nebula-3 {
-  position: absolute;
-  width: 400px; height: 400px;
-  top: 50%; right: 10%;
-  background: radial-gradient(ellipse at center, rgba(255,107,53,0.06) 0%, transparent 70%);
-  border-radius: 50%;
-  animation: drift1 18s ease-in-out infinite alternate-reverse;
-  pointer-events: none;
-}
-@keyframes drift1 {
-  0% { transform: translate(0,0) scale(1); }
-  100% { transform: translate(60px,40px) scale(1.1); }
-}
-@keyframes drift2 {
-  0% { transform: translate(0,0) scale(1.1); }
-  100% { transform: translate(-40px,60px) scale(1); }
-}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(74,240,255,.35);border-radius:100px;padding:6px 18px;font-family:'Orbitron',monospace;font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:1.8rem;background:rgba(74,240,255,.06);backdrop-filter:blur(10px);animation:fadeup .8s ease both}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:blink 1.6s infinite}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
+.hero-title{font-family:'Orbitron',monospace;font-size:clamp(2.8rem,7.5vw,6.5rem);font-weight:900;line-height:1.04;letter-spacing:-.02em;color:var(--white);margin-bottom:1.4rem;animation:fadeup .9s .15s ease both}
+.accent-c{color:var(--cyan);text-shadow:0 0 50px rgba(74,240,255,.35)}
+.accent-g{color:var(--gold)}
+.hero-sub{font-size:clamp(.95rem,2vw,1.15rem);font-weight:300;color:var(--textd);max-width:560px;margin:0 auto 2.8rem;animation:fadeup .9s .3s ease both;line-height:1.85}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;animation:fadeup .9s .45s ease both}
+.btn-p{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:var(--cyan);color:var(--bg);font-family:'Orbitron',monospace;font-size:.67rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:none;border-radius:6px;cursor:pointer;text-decoration:none;box-shadow:0 0 30px rgba(74,240,255,.3);transition:all .25s}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(74,240,255,.4)}
+.btn-s{display:inline-flex;align-items:center;gap:8px;padding:14px 32px;background:transparent;color:var(--white);font-family:'Orbitron',monospace;font-size:.67rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(255,255,255,.18);border-radius:6px;cursor:pointer;text-decoration:none;transition:all .25s}
+.btn-s:hover{border-color:rgba(255,255,255,.45);background:rgba(255,255,255,.04);transform:translateY(-2px)}
+.scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;font-family:'Orbitron',monospace;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:var(--textd);animation:fadeup 1s .8s ease both}
+.scroll-line{width:1px;height:45px;background:linear-gradient(to bottom,transparent,var(--cyan));animation:spulse 2s ease infinite}
+@keyframes spulse{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes fadeup{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 
-/* Orbiting decorative planets */
-.hero-planet {
-  position: absolute;
-  border-radius: 50%;
-  pointer-events: none;
-}
-.hp1 {
-  width: 180px; height: 180px;
-  top: 12%; right: 8%;
-  background: radial-gradient(circle at 35% 35%,#b45309 0%,#78350f 40%,#1c0a00 100%);
-  box-shadow: 0 0 60px rgba(180,83,9,0.3), inset -20px -20px 40px rgba(0,0,0,0.6);
-  animation: floatA 12s ease-in-out infinite;
-}
-.hp1::after {
-  content: '';
-  position: absolute;
-  inset: -15px;
-  border-radius: 50%;
-  border: 2px solid rgba(180,83,9,0.25);
-  box-shadow: 0 0 30px rgba(180,83,9,0.1);
-}
-.hp2 {
-  width: 80px; height: 80px;
-  bottom: 20%; left: 5%;
-  background: radial-gradient(circle at 35% 35%,#60a5fa 0%,#1e40af 50%,#020c2e 100%);
-  box-shadow: 0 0 40px rgba(96,165,250,0.3), inset -10px -10px 25px rgba(0,0,0,0.5);
-  animation: floatB 9s ease-in-out infinite;
-}
-.hp3 {
-  width: 50px; height: 50px;
-  top: 30%; left: 3%;
-  background: radial-gradient(circle at 40% 30%,#a7f3d0 0%,#065f46 60%,#011c12 100%);
-  box-shadow: 0 0 25px rgba(167,243,208,0.3), inset -8px -8px 15px rgba(0,0,0,0.5);
-  animation: floatC 7s ease-in-out infinite;
-}
-/* Saturn ring */
-.hp4 {
-  width: 120px; height: 120px;
-  bottom: 30%; right: 4%;
-  background: radial-gradient(circle at 38% 32%,#fde68a 0%,#d97706 45%,#3b1500 100%);
-  box-shadow: 0 0 40px rgba(253,230,138,0.25), inset -15px -15px 30px rgba(0,0,0,0.5);
-  animation: floatA 15s ease-in-out infinite reverse;
-}
-.hp4::before {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%,-50%) rotate(-25deg);
-  width: 180px; height: 40px;
-  border: 6px solid rgba(253,230,138,0.2);
-  border-radius: 50%;
-  box-shadow: 0 0 0 3px rgba(253,230,138,0.1);
-}
-@keyframes floatA {
-  0%,100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(5deg); }
-}
-@keyframes floatB {
-  0%,100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-15px) rotate(-8deg); }
-}
-@keyframes floatC {
-  0%,100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-10px) rotate(10deg); }
-}
+/* ── SECTION SHARED ── */
+.section{position:relative;z-index:1}
+.sec-label{font-family:'Orbitron',monospace;font-size:.55rem;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan);margin-bottom:.9rem;display:flex;align-items:center;gap:12px}
+.sec-label::before{content:'';width:28px;height:1px;background:var(--cyan)}
+.sec-h{font-family:'Orbitron',monospace;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;color:var(--white);line-height:1.2;letter-spacing:-.02em;margin-bottom:1.2rem}
+.sec-p{font-size:.95rem;color:var(--text);line-height:1.9;font-weight:300}
 
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid var(--border-hot);
-  border-radius: 100px;
-  padding: 6px 18px;
-  font-family: var(--font-display);
-  font-size: 0.55rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--cyan);
-  margin-bottom: 2rem;
-  animation: fadeInDown 0.8s ease both;
-  background: var(--cyan-dim);
-  backdrop-filter: blur(10px);
-}
-.hero-badge::before {
-  content: '';
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 8px var(--cyan);
-  animation: pulse 1.5s ease infinite;
-}
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)} }
+/* REVEAL ANIMATIONS */
+.rv{opacity:0;transform:translateY(45px);transition:opacity .75s ease,transform .75s ease}
+.rv.fl{transform:translateX(-55px)}
+.rv.fr{transform:translateX(55px)}
+.rv.sc{transform:scale(.88)}
+.rv.vis{opacity:1;transform:none}
+.rvs>*{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+.rvs.vis>*:nth-child(1){opacity:1;transform:none;transition-delay:.04s}
+.rvs.vis>*:nth-child(2){opacity:1;transform:none;transition-delay:.13s}
+.rvs.vis>*:nth-child(3){opacity:1;transform:none;transition-delay:.22s}
+.rvs.vis>*:nth-child(4){opacity:1;transform:none;transition-delay:.31s}
+.rvs.vis>*:nth-child(5){opacity:1;transform:none;transition-delay:.4s}
+.rvs.vis>*:nth-child(6){opacity:1;transform:none;transition-delay:.49s}
 
-.hero-title {
-  font-family: var(--font-display);
-  font-size: clamp(3rem, 8vw, 7rem);
-  font-weight: 900;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  color: var(--white);
-  margin-bottom: 1.5rem;
-  animation: fadeInUp 0.9s 0.2s ease both;
-}
-.hero-title .accent-cyan { color: var(--cyan); text-shadow: 0 0 40px var(--cyan-glow), 0 0 80px rgba(0,229,255,0.2); }
-.hero-title .accent-gold { color: var(--gold); text-shadow: 0 0 30px rgba(255,201,64,0.5); }
+/* ── ABOUT ── */
+#about{padding:8rem clamp(1rem,5vw,4rem);background:linear-gradient(to bottom,var(--bg),#070e1e,var(--bg))}
+.about-in{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+@media(max-width:780px){.about-in{grid-template-columns:1fr;gap:3rem}}
+.solar-art{width:300px;height:300px;position:relative;margin:0 auto}
+.art-sun{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 38% 35%,#fffacc,#ffd700,#ff8c00,#b83000);box-shadow:0 0 30px #ffd700,0 0 70px rgba(255,160,0,.4)}
+.art-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;border:1px solid rgba(255,255,255,.07)}
+.art-ring1{width:120px;height:120px}
+.art-ring2{width:190px;height:190px}
+.art-ring3{width:280px;height:280px}
+.art-planet{position:absolute;border-radius:50%}
+.ap1{width:16px;height:16px;background:radial-gradient(circle at 35% 30%,#90c0ff,#1a4aaa);box-shadow:0 0 8px rgba(130,180,255,.6);top:calc(50% - 60px);left:calc(50% - 8px);transform-origin:8px 60px;animation:orb 5.5s linear infinite}
+.ap2{width:22px;height:22px;background:radial-gradient(circle at 35% 30%,#60e8a0,#0a5e30);box-shadow:0 0 10px rgba(80,220,140,.5);top:calc(50% - 95px);left:calc(50% - 11px);transform-origin:11px 95px;animation:orb 9s linear infinite}
+.ap3{width:18px;height:18px;background:radial-gradient(circle at 35% 30%,#ffb0a0,#882010);box-shadow:0 0 8px rgba(255,130,100,.5);top:calc(50% - 140px);left:calc(50% - 9px);transform-origin:9px 140px;animation:orb 15s linear infinite}
+@keyframes orb{to{transform:rotate(360deg)}}
 
-.hero-subtitle {
-  font-size: clamp(1rem, 2.5vw, 1.2rem);
-  font-weight: 300;
-  color: var(--text-dim);
-  max-width: 580px;
-  margin: 0 auto 3rem;
-  animation: fadeInUp 0.9s 0.4s ease both;
-  line-height: 1.8;
-}
+/* ── FEATURES ── */
+#features{padding:6rem clamp(1rem,5vw,4rem);max-width:1200px;margin:0 auto}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.25rem;margin-top:3rem}
+.feat-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:2.2rem 1.8rem;transition:all .3s;backdrop-filter:blur(20px);position:relative;overflow:hidden}
+.feat-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .3s}
+.feat-card:hover{border-color:var(--border2);transform:translateY(-4px)}
+.feat-card:hover::before{opacity:1}
+.fc-c::before{background:linear-gradient(135deg,rgba(74,240,255,.06) 0%,transparent 60%)}
+.fc-g::before{background:linear-gradient(135deg,rgba(255,208,96,.06) 0%,transparent 60%)}
+.fc-p::before{background:linear-gradient(135deg,rgba(167,139,250,.06) 0%,transparent 60%)}
+.feat-ico{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:1.3rem}
+.fi-c{background:rgba(74,240,255,.1)}
+.fi-g{background:rgba(255,208,96,.1)}
+.fi-p{background:rgba(167,139,250,.1)}
+.feat-title{font-family:'Orbitron',monospace;font-size:.8rem;font-weight:600;letter-spacing:.04em;color:var(--white);margin-bottom:.6rem}
+.feat-desc{font-size:.88rem;color:var(--textd);line-height:1.85}
 
-.hero-actions {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  animation: fadeInUp 0.9s 0.6s ease both;
-}
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--cyan);
-  color: var(--bg-deep);
-  font-family: var(--font-display);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 14px 32px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  transition: all var(--transition);
-  text-decoration: none;
-  box-shadow: 0 0 30px var(--cyan-glow);
-}
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 40px var(--cyan-glow);
-}
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: transparent;
-  color: var(--white);
-  font-family: var(--font-display);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 14px 32px;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.2);
-  cursor: pointer;
-  transition: all var(--transition);
-  text-decoration: none;
-}
-.btn-secondary:hover {
-  border-color: var(--white);
-  background: rgba(255,255,255,0.05);
-  transform: translateY(-2px);
-}
+/* ── STATS ── */
+#stats{padding:3.5rem clamp(1rem,5vw,4rem);border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:linear-gradient(to right,rgba(74,240,255,.025),rgba(124,58,237,.025))}
+.stats-in{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;text-align:center}
+@media(max-width:560px){.stats-in{grid-template-columns:repeat(2,1fr)}}
+.stat-n{font-family:'Orbitron',monospace;font-size:clamp(1.8rem,4vw,3rem);font-weight:700;color:var(--cyan);line-height:1;margin-bottom:.4rem;text-shadow:0 0 20px rgba(74,240,255,.4)}
+.stat-l{font-size:.78rem;color:var(--textd);letter-spacing:.04em}
 
-.hero-scroll-hint {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-display);
-  font-size: 0.5rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  animation: fadeInUp 1s 1s ease both;
-}
-.scroll-line {
-  width: 1px; height: 50px;
-  background: linear-gradient(to bottom, transparent, var(--cyan));
-  animation: scrollPulse 2s ease infinite;
-}
-@keyframes scrollPulse {
-  0%,100%{opacity:0.3;transform:scaleY(1)}
-  50%{opacity:1;transform:scaleY(1.2)}
-}
+/* ── SIMULATION ── */
+#simulation{padding:5rem clamp(.5rem,2vw,2rem)}
+.sim-title{text-align:center;max-width:1200px;margin:0 auto 2rem}
+/* main layout */
+.sim-wrap{max-width:1600px;margin:0 auto;display:grid;grid-template-columns:290px 1fr 290px;gap:1.2rem;align-items:start}
+@media(max-width:1100px){.sim-wrap{grid-template-columns:1fr}.side-l,.side-r{display:none}.mob-panel{display:block!important}}
 
-@keyframes fadeInUp {
-  from { opacity:0; transform:translateY(30px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-@keyframes fadeInDown {
-  from { opacity:0; transform:translateY(-20px); }
-  to   { opacity:1; transform:translateY(0); }
-}
+/* CANVAS */
+.canvas-box{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--border);background:#020510;box-shadow:0 0 60px rgba(74,240,255,.07),0 0 120px rgba(124,58,237,.05);aspect-ratio:16/9}
+#C{display:block;width:100%;height:100%;cursor:crosshair;touch-action:none}
 
-/* =============================================
-   PARALLAX PLANET SECTION
-============================================= */
-#parallax-section {
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-  padding: 8rem 0;
-  background: linear-gradient(to bottom, var(--bg-deep), #060f24, var(--bg-deep));
-}
-.parallax-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 clamp(1.5rem,5vw,4rem);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6rem;
-  align-items: center;
-}
-@media(max-width:768px){
-  .parallax-inner { grid-template-columns:1fr; gap:3rem; }
-}
-.parallax-text { position: relative; }
-.section-label {
-  font-family: var(--font-display);
-  font-size: 0.6rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--cyan);
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.section-label::before {
-  content: '';
-  width: 30px; height: 1px;
-  background: var(--cyan);
-}
-.section-heading {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 700;
-  color: var(--white);
-  line-height: 1.2;
-  margin-bottom: 1.5rem;
-  letter-spacing: -0.02em;
-}
-.section-body {
-  font-size: 1rem;
-  color: var(--text);
-  line-height: 1.9;
-  font-weight: 300;
-}
-.section-body p + p { margin-top: 1rem; }
+/* canvas HUD */
+.hud-top{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:linear-gradient(to bottom,rgba(2,5,16,.9),transparent);pointer-events:none;z-index:10}
+.hud-status{display:flex;align-items:center;gap:7px;font-family:'Space Mono',monospace;font-size:.62rem;color:var(--cyan)}
+.hud-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.hud-dot.off{background:var(--gold);box-shadow:0 0 8px var(--gold)}
+.hud-time{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--textd)}
 
-.parallax-visual {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.solar-art {
-  position: relative;
-  width: 320px; height: 320px;
-}
-.art-sun {
-  position: absolute;
-  top:50%; left:50%;
-  transform: translate(-50%,-50%);
-  width: 80px; height: 80px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 40% 35%, #fff9c4 0%, #ffd700 30%, #ff8c00 60%, #c0392b 100%);
-  box-shadow: 0 0 30px #ffd700, 0 0 60px rgba(255,140,0,0.5), 0 0 100px rgba(255,140,0,0.2);
-  z-index: 5;
-}
-.art-orbit {
-  position: absolute;
-  top:50%; left:50%;
-  transform: translate(-50%,-50%);
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.08);
-}
-.art-orbit-1 { width:130px; height:130px; }
-.art-orbit-2 { width:200px; height:200px; }
-.art-orbit-3 { width:290px; height:290px; }
-.art-planet {
-  position: absolute;
-  border-radius: 50%;
-  transform-origin: center;
-}
-.ap1 {
-  width:18px; height:18px;
-  background: radial-gradient(circle at 35% 30%, #93c5fd, #1d4ed8);
-  box-shadow: 0 0 10px rgba(147,197,253,0.6);
-  top: 50%; left: 50%;
-  margin: -65px 0 0 -9px;
-  animation: orbit1 6s linear infinite;
-}
-.ap2 {
-  width:26px; height:26px;
-  background: radial-gradient(circle at 35% 30%, #6ee7b7, #047857);
-  box-shadow: 0 0 12px rgba(110,231,183,0.5);
-  top: 50%; left: 50%;
-  margin: -100px 0 0 -13px;
-  animation: orbit2 10s linear infinite;
-}
-.ap3 {
-  width:20px; height:20px;
-  background: radial-gradient(circle at 35% 30%, #fca5a5, #991b1b);
-  box-shadow: 0 0 10px rgba(252,165,165,0.5);
-  top: 50%; left: 50%;
-  margin: -145px 0 0 -10px;
-  animation: orbit3 16s linear infinite;
-}
-@keyframes orbit1 {
-  to { transform: rotate(360deg) translateY(-65px) rotate(-360deg); }
-}
-@keyframes orbit2 {
-  to { transform: rotate(360deg) translateY(-100px) rotate(-360deg); }
-}
-@keyframes orbit3 {
-  to { transform: rotate(360deg) translateY(-145px) rotate(-360deg); }
-}
+.hud-btm{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:center;gap:.6rem;padding:10px 12px;background:linear-gradient(to top,rgba(2,5,16,.95),transparent);z-index:10;flex-wrap:wrap}
+.cb{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:5px;font-family:'Orbitron',monospace;font-size:.58rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;cursor:pointer;transition:all .25s;border:1px solid transparent;white-space:nowrap}
+.cb-play{background:var(--cyan);color:var(--bg);border-color:var(--cyan);box-shadow:0 0 18px rgba(74,240,255,.3)}
+.cb-play:hover{transform:scale(1.04);box-shadow:0 0 28px rgba(74,240,255,.5)}
+.cb-pause{background:transparent;color:var(--gold);border-color:var(--gold)}
+.cb-pause:hover{background:rgba(255,208,96,.1)}
+.cb-reset{background:transparent;color:var(--textd);border-color:rgba(255,255,255,.12)}
+.cb-reset:hover{color:var(--white);border-color:rgba(255,255,255,.3)}
+.cb-add{background:transparent;color:var(--purple);border-color:var(--purple)}
+.cb-add:hover{background:rgba(167,139,250,.12)}
+.cb-del{background:transparent;color:var(--red);border-color:rgba(255,85,119,.3)}
+.cb-del:hover{background:rgba(255,85,119,.1)}
 
-/* Fix orbit animations */
-.ap1 { margin: 0; top: calc(50% - 65px); left: calc(50% - 9px); transform-origin: 9px 65px; }
-.ap2 { margin: 0; top: calc(50% - 100px); left: calc(50% - 13px); transform-origin: 13px 100px; }
-.ap3 { margin: 0; top: calc(50% - 145px); left: calc(50% - 10px); transform-origin: 10px 145px; }
-@keyframes orbit1 { to { transform: rotate(360deg); } }
-@keyframes orbit2 { to { transform: rotate(360deg); } }
-@keyframes orbit3 { to { transform: rotate(360deg); } }
+/* DRAG-TO-LAUNCH hint overlay */
+.launch-hint{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);background:rgba(74,240,255,.12);border:1px solid rgba(74,240,255,.3);border-radius:8px;padding:8px 16px;font-size:.72rem;color:var(--cyan);pointer-events:none;opacity:0;transition:opacity .4s;z-index:20;white-space:nowrap}
+.launch-hint.show{opacity:1}
 
-/* =============================================
-   FEATURES SECTION
-============================================= */
-#features {
-  position: relative;
-  z-index: 1;
-  padding: 6rem clamp(1.5rem,5vw,4rem);
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.features-header {
-  text-align: center;
-  margin-bottom: 4rem;
-}
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-.feature-card {
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2.5rem 2rem;
-  position: relative;
-  overflow: hidden;
-  transition: all var(--transition);
-  backdrop-filter: blur(20px);
-}
-.feature-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--cyan-dim) 0%, transparent 60%);
-  opacity: 0;
-  transition: opacity var(--transition);
-}
-.feature-card:hover { border-color: var(--border-hot); transform: translateY(-4px); }
-.feature-card:hover::before { opacity: 1; }
-.feature-icon {
-  width: 56px; height: 56px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.6rem;
-  margin-bottom: 1.5rem;
-  position: relative;
-}
-.fi-cyan { background: var(--cyan-dim); box-shadow: 0 0 20px var(--cyan-dim); }
-.fi-gold { background: var(--gold-dim); box-shadow: 0 0 20px var(--gold-dim); }
-.fi-purple { background: var(--purple-dim); box-shadow: 0 0 20px var(--purple-dim); }
-.feature-title {
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  color: var(--white);
-  margin-bottom: 0.75rem;
-}
-.feature-desc { font-size: 0.9rem; color: var(--text-dim); line-height: 1.8; }
+/* COLLISION FLASH */
+.cflash{position:absolute;inset:0;border-radius:16px;pointer-events:none;opacity:0;background:rgba(255,255,255,.12);transition:opacity .08s;z-index:15}
+.cflash.on{opacity:1}
 
-/* =============================================
-   STATS BAR
-============================================= */
-#stats-bar {
-  position: relative;
-  z-index: 1;
-  padding: 4rem clamp(1.5rem,5vw,4rem);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  background: linear-gradient(to right, rgba(0,229,255,0.03), rgba(124,58,237,0.03));
-}
-.stats-inner {
-  max-width: 1000px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
-  text-align: center;
-}
-@media(max-width:600px) { .stats-inner { grid-template-columns: repeat(2,1fr); } }
-.stat-num {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  font-weight: 700;
-  color: var(--cyan);
-  text-shadow: 0 0 20px var(--cyan-glow);
-  line-height: 1;
-  margin-bottom: 0.5rem;
-}
-.stat-label {
-  font-size: 0.8rem;
-  color: var(--text-dim);
-  font-weight: 400;
-  letter-spacing: 0.05em;
-}
+/* SIDE PANELS */
+.sim-panel{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;backdrop-filter:blur(24px)}
+.ph{padding:.9rem 1.1rem;border-bottom:1px solid var(--border);font-family:'Orbitron',monospace;font-size:.57rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:7px}
+.ph::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan)}
+.pb{padding:1.1rem}
+.psec{margin-bottom:1.3rem}
+.psec:last-child{margin-bottom:0}
+.plbl{font-family:'Orbitron',monospace;font-size:.52rem;letter-spacing:.13em;text-transform:uppercase;color:var(--textd);margin-bottom:5px;display:flex;justify-content:space-between;align-items:center}
+.pval{font-family:'Space Mono',monospace;font-size:.72rem;color:var(--cyan)}
 
-/* =============================================
-   SIMULATION SECTION
-============================================= */
-#simulation-section {
-  position: relative;
-  z-index: 1;
-  padding: 5rem clamp(1rem,3vw,2rem);
-}
-.sim-header {
-  text-align: center;
-  max-width: 1200px;
-  margin: 0 auto 2.5rem;
-}
+/* sliders */
+.sl{width:100%;-webkit-appearance:none;height:3px;background:rgba(255,255,255,.08);border-radius:2px;outline:none;cursor:pointer;margin-bottom:.9rem}
+.sl::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px rgba(74,240,255,.5);cursor:pointer}
+.sl::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px rgba(74,240,255,.5);border:none;cursor:pointer}
 
-.sim-layout {
-  max-width: 1600px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 280px 1fr 280px;
-  gap: 1.5rem;
-  align-items: start;
-}
-@media(max-width:1100px) {
-  .sim-layout { grid-template-columns: 1fr; }
-  .sim-panel-left, .sim-panel-right { display: none; }
-  .sim-panel-mobile { display: block !important; }
-}
+/* toggles */
+.trow{display:flex;justify-content:space-between;align-items:center;margin-bottom:.65rem;font-size:.82rem;color:var(--text)}
+.tog{position:relative;width:34px;height:19px;cursor:pointer;flex-shrink:0}
+.tog input{display:none}
+.tog-track{position:absolute;inset:0;background:rgba(255,255,255,.08);border-radius:10px;border:1px solid var(--border);transition:background .25s}
+.tog input:checked+.tog-track{background:var(--cyan);border-color:var(--cyan)}
+.tog-thumb{position:absolute;top:3px;left:3px;width:13px;height:13px;background:white;border-radius:50%;transition:transform .25s;box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.tog input:checked~.tog-thumb{transform:translateX(15px)}
 
-/* Canvas wrapper */
-.canvas-wrapper {
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  background: #010409;
-  box-shadow: 0 0 60px rgba(0,229,255,0.08), 0 0 120px rgba(124,58,237,0.06);
-  aspect-ratio: 16/9;
-}
-#simCanvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-  cursor: crosshair;
-}
-.canvas-overlay-top {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  background: linear-gradient(to bottom, rgba(1,4,9,0.9), transparent);
-  pointer-events: none;
-}
-.sim-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  color: var(--cyan);
-}
-.status-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 8px var(--green);
-}
-.status-dot.paused { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
-.sim-time-display {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  color: var(--text-dim);
-}
-.canvas-overlay-bottom {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  display: flex;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 12px;
-  background: linear-gradient(to top, rgba(1,4,9,0.95), transparent);
-}
-.ctrl-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-family: var(--font-display);
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all var(--transition);
-  border: 1px solid transparent;
-}
-.ctrl-btn-play {
-  background: var(--cyan);
-  color: var(--bg-deep);
-  border-color: var(--cyan);
-  box-shadow: 0 0 20px var(--cyan-glow);
-}
-.ctrl-btn-play:hover { transform:scale(1.05); box-shadow:0 0 30px var(--cyan-glow); }
-.ctrl-btn-pause {
-  background: transparent;
-  color: var(--gold);
-  border-color: var(--gold);
-}
-.ctrl-btn-pause:hover { background: var(--gold-dim); }
-.ctrl-btn-reset {
-  background: transparent;
-  color: var(--text-dim);
-  border-color: rgba(255,255,255,0.12);
-}
-.ctrl-btn-reset:hover { color: var(--white); border-color: rgba(255,255,255,0.3); }
-.ctrl-btn-add {
-  background: transparent;
-  color: var(--purple);
-  border-color: var(--purple);
-}
-.ctrl-btn-add:hover { background: var(--purple-dim); }
+/* color picker */
+.cprow{display:flex;gap:6px;flex-wrap:wrap;margin-top:.5rem}
+.cdot{width:21px;height:21px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .25s}
+.cdot:hover,.cdot.on{border-color:white;transform:scale(1.22)}
 
-/* Side panels */
-.sim-panel {
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  backdrop-filter: blur(20px);
-}
-.panel-header {
-  padding: 1rem 1.25rem;
-  border-bottom: 1px solid var(--border);
-  font-family: var(--font-display);
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--cyan);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.panel-header::before {
-  content: '';
-  width: 4px; height: 4px;
-  border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 6px var(--cyan);
-}
-.panel-body { padding: 1.25rem; }
-.panel-section { margin-bottom: 1.5rem; }
-.panel-section:last-child { margin-bottom: 0; }
-.param-label {
-  font-family: var(--font-display);
-  font-size: 0.55rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 6px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.param-value {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--cyan);
-}
-.slider-input {
-  width: 100%;
-  -webkit-appearance: none;
-  appearance: none;
-  height: 3px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 2px;
-  outline: none;
-  cursor: pointer;
-  margin-bottom: 1rem;
-}
-.slider-input::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 14px; height: 14px;
-  border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 8px var(--cyan-glow);
-  cursor: pointer;
-}
-.slider-input::-moz-range-thumb {
-  width: 14px; height: 14px;
-  border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 8px var(--cyan-glow);
-  border: none;
-  cursor: pointer;
-}
+/* speed buttons */
+.spbtns{display:flex;gap:3px;flex-wrap:wrap}
+.spb{flex:1;min-width:32px;padding:5px 0;text-align:center;font-family:'Space Mono',monospace;font-size:.62rem;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px;color:var(--textd);cursor:pointer;transition:all .25s}
+.spb:hover{border-color:var(--cyan);color:var(--cyan)}
+.spb.on{background:rgba(74,240,255,.1);border-color:var(--cyan);color:var(--cyan)}
 
-.toggle-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
-  font-size: 0.82rem;
-  color: var(--text);
-}
-.toggle {
-  position: relative;
-  width: 36px; height: 20px;
-  cursor: pointer;
-}
-.toggle input { display: none; }
-.toggle-track {
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.08);
-  border-radius: 10px;
-  transition: background var(--transition);
-  border: 1px solid var(--border);
-}
-.toggle input:checked + .toggle-track { background: var(--cyan); border-color: var(--cyan); }
-.toggle-thumb {
-  position: absolute;
-  top: 3px; left: 3px;
-  width: 14px; height: 14px;
-  background: white;
-  border-radius: 50%;
-  transition: transform var(--transition);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
-}
-.toggle input:checked ~ .toggle-thumb { transform: translateX(16px); }
+/* info/stats */
+.ibox{background:rgba(74,240,255,.04);border:1px solid var(--border);border-radius:8px;padding:.9rem;margin-bottom:.85rem}
+.iboxtitle{font-family:'Orbitron',monospace;font-size:.57rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.65rem}
+.irow{display:flex;justify-content:space-between;align-items:center;font-size:.76rem;color:var(--textd);padding:3px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.irow:last-child{border-bottom:none}
+.ival{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--cyan)}
 
-/* Body color selector */
-.color-picker-row {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-top: 0.5rem;
-}
-.color-dot {
-  width: 22px; height: 22px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: all var(--transition);
-}
-.color-dot:hover, .color-dot.active { border-color: white; transform: scale(1.2); }
+/* body list */
+.blist{list-style:none}
+.bi{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:6px;cursor:pointer;transition:background .2s;margin-bottom:3px}
+.bi:hover{background:rgba(255,255,255,.04)}
+.bi.sel{background:rgba(74,240,255,.08);border:1px solid rgba(74,240,255,.18)}
+.bdot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.bname{font-size:.78rem;color:var(--text);flex:1}
+.bmass{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--textd)}
 
-/* Info panel right */
-.info-box {
-  background: rgba(0,229,255,0.04);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-.info-box-title {
-  font-family: var(--font-display);
-  font-size: 0.6rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 0.75rem;
-}
-.info-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.78rem;
-  color: var(--text-dim);
-  padding: 4px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-.info-row:last-child { border-bottom: none; }
-.info-row-val {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: var(--cyan);
-}
+/* no selection */
+.nosel{text-align:center;padding:1.8rem 1rem;color:var(--textd);font-size:.84rem;font-style:italic;line-height:1.65}
+.nosel-ico{font-size:1.8rem;margin-bottom:.4rem;opacity:.35}
 
-.no-selection {
-  text-align: center;
-  padding: 2rem 1rem;
-  color: var(--text-dim);
-  font-size: 0.85rem;
-  font-style: italic;
-  line-height: 1.6;
-}
-.no-selection-icon { font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.4; }
+/* mob panel */
+.mob-panel{display:none;background:var(--panel);border:1px solid var(--border);border-radius:var(--r);backdrop-filter:blur(24px);margin-top:1rem}
+.mob-tabs{display:flex;border-bottom:1px solid var(--border)}
+.mob-tab{flex:1;padding:11px;font-family:'Orbitron',monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--textd);cursor:pointer;text-align:center;transition:all .25s;background:none;border:none}
+.mob-tab.on{color:var(--cyan);border-bottom:2px solid var(--cyan);margin-bottom:-1px}
+.mob-tc{padding:1.1rem;display:none}
+.mob-tc.on{display:block}
 
-/* Body list */
-.body-list { list-style: none; }
-.body-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background var(--transition);
-  margin-bottom: 4px;
-}
-.body-item:hover { background: rgba(255,255,255,0.04); }
-.body-item.selected { background: var(--cyan-dim); border: 1px solid rgba(0,229,255,0.2); }
-.body-dot {
-  width: 12px; height: 12px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.body-name {
-  font-size: 0.8rem;
-  color: var(--text);
-  flex: 1;
-}
-.body-mass {
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  color: var(--text-dim);
-}
+/* ── PRESETS ── */
+#presets{padding:6rem clamp(1rem,5vw,4rem);max-width:1200px;margin:0 auto}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.1rem;margin-top:2.5rem}
+.pcard{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:1.6rem;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;backdrop-filter:blur(20px);text-align:center}
+.pcard::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--cyan),transparent);opacity:0;transition:opacity .3s}
+.pcard:hover{border-color:var(--border2);transform:translateY(-4px)}
+.pcard:hover::after{opacity:1}
+.pvis{width:80px;height:80px;margin:0 auto 1.1rem;position:relative}
+.ptitle{font-family:'Orbitron',monospace;font-size:.75rem;font-weight:600;color:var(--white);margin-bottom:.4rem}
+.pdesc{font-size:.78rem;color:var(--textd);line-height:1.65}
+.ptag{display:inline-block;margin-top:.9rem;font-family:'Orbitron',monospace;font-size:.48rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);border:1px solid rgba(74,240,255,.28);border-radius:100px;padding:3px 10px}
 
-/* Speed control */
-.speed-btns {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-.speed-btn {
-  flex: 1;
-  min-width: 36px;
-  padding: 5px 0;
-  text-align: center;
-  font-family: var(--font-mono);
-  font-size: 0.65rem;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--text-dim);
-  cursor: pointer;
-  transition: all var(--transition);
-}
-.speed-btn:hover { border-color: var(--cyan); color: var(--cyan); }
-.speed-btn.active { background: var(--cyan-dim); border-color: var(--cyan); color: var(--cyan); }
+/* ── EDUCATION ── */
+#education{padding:6rem clamp(1rem,5vw,4rem);background:linear-gradient(to bottom,var(--bg),#040a18,var(--bg))}
+.edu-in{max-width:1200px;margin:0 auto}
+.edu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.3rem;margin-top:2.8rem}
+.edu-card{background:var(--panel);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;backdrop-filter:blur(20px);transition:all .3s}
+.edu-card:hover{border-color:var(--border2)}
+.edu-top{padding:1.8rem;background:linear-gradient(135deg,rgba(74,240,255,.06) 0%,transparent 60%);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.9rem}
+.edu-ico{font-size:1.8rem}
+.edu-title{font-family:'Orbitron',monospace;font-size:.8rem;font-weight:600;color:var(--white);letter-spacing:.04em}
+.edu-body{padding:1.6rem 1.8rem}
+.edu-body p{font-size:.88rem;color:var(--text);line-height:1.88;margin-bottom:.7rem}
+.edu-formula{background:rgba(0,0,0,.45);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:6px;padding:.9rem 1.1rem;font-family:'Space Mono',monospace;font-size:.78rem;color:var(--cyan);margin:.9rem 0;letter-spacing:.04em}
+.tip-box{background:rgba(74,240,255,.05);border:1px solid rgba(74,240,255,.12);border-radius:8px;padding:.9rem 1.1rem}
+.tip-label{font-family:'Orbitron',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.45rem}
+.tip-label.tc{color:var(--cyan)}
+.tip-label.tg{color:var(--gold)}
+.tip-label.tp{color:var(--purple)}
 
-/* Mobile controls */
-.sim-panel-mobile {
-  display: none;
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  backdrop-filter: blur(20px);
-  margin-top: 1.5rem;
-}
-.mobile-tabs {
-  display: flex;
-  border-bottom: 1px solid var(--border);
-}
-.mobile-tab {
-  flex: 1;
-  padding: 12px;
-  font-family: var(--font-display);
-  font-size: 0.55rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  cursor: pointer;
-  text-align: center;
-  transition: all var(--transition);
-  background: none;
-  border: none;
-}
-.mobile-tab.active { color: var(--cyan); border-bottom: 2px solid var(--cyan); margin-bottom: -1px; }
-.mobile-tab-content { padding: 1.25rem; display: none; }
-.mobile-tab-content.active { display: block; }
+/* ── PLANET PARADE ── */
+#parade{padding:6rem 0;overflow:hidden}
+.parade-inner{max-width:1200px;margin:0 auto clamp(2rem,4vh,3rem);padding:0 clamp(1rem,5vw,4rem)}
+.pstrip{overflow:hidden;padding:1.5rem 0}
+.pstrip-inner{display:flex;gap:4rem;align-items:flex-end;animation:scroll-planets 50s linear infinite;width:max-content}
+.pstrip-inner:hover{animation-play-state:paused}
+@keyframes scroll-planets{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.pp{display:flex;flex-direction:column;align-items:center;gap:.8rem;flex-shrink:0}
+.pp-sphere{border-radius:50%;flex-shrink:0;position:relative}
+.pp-name{font-family:'Orbitron',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--textd)}
+.pp-fact{font-size:.72rem;color:var(--textd);text-align:center;max-width:110px;line-height:1.5}
 
-/* =============================================
-   PRESETS SECTION
-============================================= */
-#presets-section {
-  position: relative;
-  z-index: 1;
-  padding: 6rem clamp(1.5rem,5vw,4rem);
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.presets-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.25rem;
-  margin-top: 2.5rem;
-}
-.preset-card {
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.75rem;
-  cursor: pointer;
-  transition: all var(--transition);
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(20px);
-  text-align: center;
-}
-.preset-card::after {
-  content: '';
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(to right, transparent, var(--cyan), transparent);
-  opacity: 0;
-  transition: opacity var(--transition);
-}
-.preset-card:hover { border-color: var(--border-hot); transform: translateY(-4px); }
-.preset-card:hover::after { opacity: 1; }
-.preset-visual {
-  width: 80px; height: 80px;
-  margin: 0 auto 1.25rem;
-  position: relative;
-  border-radius: 50%;
-}
-.preset-title {
-  font-family: var(--font-display);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  color: var(--white);
-  margin-bottom: 0.5rem;
-}
-.preset-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.6; }
-.preset-tag {
-  display: inline-block;
-  margin-top: 1rem;
-  font-family: var(--font-display);
-  font-size: 0.5rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--cyan);
-  border: 1px solid rgba(0,229,255,0.3);
-  border-radius: 100px;
-  padding: 3px 10px;
-}
+/* ── FOOTER ── */
+footer{position:relative;z-index:1;padding:3.5rem clamp(1rem,5vw,4rem) 2rem;border-top:1px solid var(--border);background:rgba(6,10,20,.9)}
+.foot-in{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.foot-logo{font-family:'Orbitron',monospace;font-size:1rem;font-weight:900;color:var(--cyan);letter-spacing:.18em}
+.foot-note{font-size:.78rem;color:var(--textd)}
 
-/* =============================================
-   EDUCATIONAL SECTION
-============================================= */
-#education-section {
-  position: relative;
-  z-index: 1;
-  padding: 6rem clamp(1.5rem,5vw,4rem);
-  background: linear-gradient(to bottom, var(--bg-deep), #04091a, var(--bg-deep));
-}
-.education-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.edu-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem;
-  margin-top: 3rem;
-}
-.edu-card {
-  background: var(--bg-panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  backdrop-filter: blur(20px);
-  transition: all var(--transition);
-}
-.edu-card:hover { border-color: var(--border-hot); box-shadow: 0 0 40px rgba(0,229,255,0.05); }
-.edu-card-top {
-  padding: 2rem;
-  background: linear-gradient(135deg, var(--cyan-dim) 0%, transparent 60%);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.edu-icon { font-size: 2rem; }
-.edu-card-title {
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  color: var(--white);
-}
-.edu-card-body { padding: 1.75rem 2rem; }
-.edu-card-body p {
-  font-size: 0.9rem;
-  color: var(--text);
-  line-height: 1.85;
-  margin-bottom: 0.75rem;
-}
-.edu-formula {
-  background: rgba(0,0,0,0.4);
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--cyan);
-  border-radius: 6px;
-  padding: 1rem 1.25rem;
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--cyan);
-  margin: 1rem 0;
-  letter-spacing: 0.05em;
-}
+/* ── MODAL ── */
+.moverlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(10px);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.moverlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:2.2rem;max-width:460px;width:90%;transform:scale(.93);transition:transform .3s;box-shadow:0 0 70px rgba(74,240,255,.1)}
+.moverlay.open .modal{transform:scale(1)}
+.mtitle{font-family:'Orbitron',monospace;font-size:.95rem;font-weight:700;color:var(--white);margin-bottom:1.4rem}
+.mfield{margin-bottom:1.1rem}
+.mlbl{font-family:'Orbitron',monospace;font-size:.56rem;letter-spacing:.13em;text-transform:uppercase;color:var(--textd);margin-bottom:6px;display:flex;justify-content:space-between}
+.mlbl span{font-family:'Space Mono',monospace;color:var(--cyan)}
+.minput{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:6px;padding:9px 13px;color:var(--white);font-family:'Inter',sans-serif;font-size:.92rem;outline:none;transition:border .25s}
+.minput:focus{border-color:var(--cyan)}
+.mactions{display:flex;gap:.9rem;margin-top:1.4rem}
+.mactions .btn-p{flex:1;justify-content:center}
+.mbtn-c{flex:1;padding:11px;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--textd);font-family:'Orbitron',monospace;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .25s}
+.mbtn-c:hover{border-color:var(--red);color:var(--red)}
 
-/* =============================================
-   PLANET PARADE SECTION (scroll animation showcase)
-============================================= */
-#planet-parade {
-  position: relative;
-  z-index: 1;
-  padding: 6rem 0;
-  overflow: hidden;
-}
-.parade-title-center {
-  text-align: center;
-  margin-bottom: 4rem;
-  padding: 0 2rem;
-}
-.planet-strip {
-  display: flex;
-  gap: 3rem;
-  padding: 2rem 4rem;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.planet-strip::-webkit-scrollbar { display: none; }
-.planet-strip-inner {
-  display: flex;
-  gap: 4rem;
-  align-items: center;
-  animation: planetScroll 40s linear infinite;
-  width: max-content;
-}
-@keyframes planetScroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-.parade-planet {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  flex-shrink: 0;
-}
-.pp-sphere {
-  border-radius: 50%;
-  position: relative;
-  flex-shrink: 0;
-}
-.pp-name {
-  font-family: var(--font-display);
-  font-size: 0.65rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-}
-.pp-fact {
-  font-size: 0.75rem;
-  color: var(--text-dim);
-  text-align: center;
-  max-width: 120px;
-  line-height: 1.5;
-}
+/* ── TOAST ── */
+.toast{position:fixed;bottom:1.8rem;right:1.8rem;z-index:3000;background:var(--panel);border:1px solid var(--border2);border-radius:8px;padding:11px 18px;font-size:.83rem;color:var(--white);backdrop-filter:blur(20px);transform:translateX(160%);transition:transform .4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 25px rgba(74,240,255,.1);max-width:280px}
+.toast.show{transform:translateX(0)}
 
-/* =============================================
-   SCROLL ANIMATIONS (reveal classes)
-============================================= */
-.reveal {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-.reveal.from-left {
-  transform: translateX(-60px);
-}
-.reveal.from-right {
-  transform: translateX(60px);
-}
-.reveal.scale-in {
-  transform: scale(0.85);
-}
-.reveal.visible {
-  opacity: 1;
-  transform: none;
-}
-.reveal-stagger > * {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-.reveal-stagger.visible > *:nth-child(1) { opacity:1; transform:none; transition-delay:0.05s; }
-.reveal-stagger.visible > *:nth-child(2) { opacity:1; transform:none; transition-delay:0.15s; }
-.reveal-stagger.visible > *:nth-child(3) { opacity:1; transform:none; transition-delay:0.25s; }
-.reveal-stagger.visible > *:nth-child(4) { opacity:1; transform:none; transition-delay:0.35s; }
-.reveal-stagger.visible > *:nth-child(5) { opacity:1; transform:none; transition-delay:0.45s; }
-.reveal-stagger.visible > *:nth-child(6) { opacity:1; transform:none; transition-delay:0.55s; }
+/* ── KEYBOARD HINT ── */
+.kbd-hint{display:inline-block;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:2px 6px;font-family:'Space Mono',monospace;font-size:.65rem;color:var(--textd)}
 
-/* Parallax elements (moved by JS on scroll) */
-[data-parallax] { will-change: transform; }
-
-/* =============================================
-   FOOTER
-============================================= */
-footer {
-  position: relative;
-  z-index: 1;
-  padding: 4rem clamp(1.5rem,5vw,4rem) 2rem;
-  border-top: 1px solid var(--border);
-  background: rgba(2,5,16,0.8);
-}
-.footer-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-.footer-logo {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--cyan);
-  letter-spacing: 0.15em;
-}
-.footer-note {
-  font-size: 0.8rem;
-  color: var(--text-dim);
-}
-
-/* =============================================
-   MODAL
-============================================= */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(10px);
-  z-index: 2000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--transition);
-}
-.modal-overlay.open { opacity: 1; pointer-events: all; }
-.modal {
-  background: var(--bg-mid);
-  border: 1px solid var(--border-hot);
-  border-radius: 16px;
-  padding: 2.5rem;
-  max-width: 480px;
-  width: 90%;
-  transform: scale(0.92);
-  transition: transform var(--transition);
-  box-shadow: 0 0 80px rgba(0,229,255,0.12);
-}
-.modal-overlay.open .modal { transform: scale(1); }
-.modal-title {
-  font-family: var(--font-display);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--white);
-  margin-bottom: 1.5rem;
-  letter-spacing: 0.05em;
-}
-.modal-field {
-  margin-bottom: 1.25rem;
-}
-.modal-label {
-  font-family: var(--font-display);
-  font-size: 0.6rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 8px;
-  display: flex;
-  justify-content: space-between;
-}
-.modal-label span { font-family: var(--font-mono); color: var(--cyan); }
-.modal-actions {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-.modal-actions .btn-primary { flex: 1; justify-content: center; }
-.btn-cancel {
-  flex: 1;
-  padding: 12px;
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--text-dim);
-  font-family: var(--font-display);
-  font-size: 0.65rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all var(--transition);
-}
-.btn-cancel:hover { border-color: var(--red); color: var(--red); }
-
-/* notification toast */
-.toast {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 3000;
-  background: var(--bg-panel);
-  border: 1px solid var(--border-hot);
-  border-radius: 8px;
-  padding: 12px 20px;
-  font-size: 0.85rem;
-  color: var(--white);
-  backdrop-filter: blur(20px);
-  transform: translateX(150%);
-  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
-  box-shadow: 0 0 30px var(--cyan-dim);
-  max-width: 300px;
-}
-.toast.show { transform: translateX(0); }
-
-/* Gravity waves decorative animation */
-.gravity-waves {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.gwave {
-  position: absolute;
-  border-radius: 50%;
-  border: 1px solid rgba(0,229,255,0.04);
-  top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
-  animation: waveExpand 8s ease-out infinite;
-}
-.gwave:nth-child(2) { animation-delay: 2.5s; }
-.gwave:nth-child(3) { animation-delay: 5s; }
-@keyframes waveExpand {
-  0%   { width:0; height:0; opacity:0.6; }
-  100% { width:600px; height:600px; opacity:0; }
-}
-
-/* =============================================
-   COLLISION FLASH
-============================================= */
-.collision-flash {
-  position: absolute;
-  inset: 0;
-  background: rgba(255,255,255,0.15);
-  border-radius: 16px;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.1s;
-}
-.collision-flash.flash { opacity: 1; }
-
-/* Responsive */
-@media(max-width:900px) {
-  .nav-links { display: none; }
-}
-@media(max-width:600px) {
-  .sim-panel-left, .sim-panel-right { display: none; }
-  .sim-panel-mobile { display: block !important; }
-}
+/* grid waves for sim bg */
+.gwaves{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.5}
+.gw{position:absolute;border-radius:50%;border:1px solid rgba(74,240,255,.04);top:50%;left:50%;transform:translate(-50%,-50%);animation:gwave 9s ease-out infinite}
+.gw:nth-child(2){animation-delay:3s}
+.gw:nth-child(3){animation-delay:6s}
+@keyframes gwave{0%{width:0;height:0;opacity:.5}100%{width:700px;height:700px;opacity:0}}
 </style>
 </head>
 <body>
 
-<!-- Background star canvas -->
-<canvas id="star-canvas"></canvas>
+<canvas id="starfield"></canvas>
 
-<!-- ===================== NAVIGATION ===================== -->
-<nav id="navbar">
-  <a href="#" class="nav-logo">
-    <div class="nav-logo-icon"></div>
-    KOZMOSI
-  </a>
-  <ul class="nav-links">
-    <li><a href="#simulation-section">Simulimi</a></li>
-    <li><a href="#presets-section">Presets</a></li>
-    <li><a href="#education-section">Fizika</a></li>
-    <li><a href="#planet-parade">Planetët</a></li>
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo"><div class="logo-orb"></div>KOZMOSI</a>
+  <ul>
+    <li><a href="#simulation">Simulimi</a></li>
+    <li><a href="#presets">Presets</a></li>
+    <li><a href="#education">Fizika</a></li>
+    <li><a href="#parade">Planetët</a></li>
   </ul>
-  <a href="#simulation-section" class="nav-cta">Nis Tani</a>
+  <a href="#simulation" class="nav-btn">Nis Tani</a>
 </nav>
 
-<!-- ===================== HERO ===================== -->
+<!-- HERO -->
 <section id="hero">
-  <div class="nebula-1"></div>
-  <div class="nebula-2"></div>
-  <div class="nebula-3"></div>
-
-  <!-- Decorative planets -->
-  <div class="hero-planet hp1" data-parallax="0.08"></div>
-  <div class="hero-planet hp2" data-parallax="0.12"></div>
-  <div class="hero-planet hp3" data-parallax="0.15"></div>
-  <div class="hero-planet hp4" data-parallax="0.06"></div>
+  <div class="nebula neb1"></div>
+  <div class="nebula neb2"></div>
+  <div class="hplanet hp1"></div>
+  <div class="hplanet hp2"></div>
+  <div class="hplanet hp3"></div>
+  <div class="hplanet hp4"></div>
 
   <div class="hero-badge">⬡ Simulim Interaktiv i Hapësirës</div>
-  <h1 class="hero-title">
-    Eksploro<br>
-    <span class="accent-cyan">Universin</span><br>
-    <span class="accent-gold">me Duart e Tua</span>
-  </h1>
-  <p class="hero-subtitle">
-    Krijo sistemet tuaja diellore, studioje gravitetin, trajektoren dhe lëvizjen orbitale — interaktivisht dhe në kohë reale.
-  </p>
-  <div class="hero-actions">
-    <a href="#simulation-section" class="btn-primary">🚀 Nis Simulimin</a>
-    <a href="#education-section" class="btn-secondary">📚 Mëso Fizikën</a>
+  <h1 class="hero-title">Eksploro<br><span class="accent-c">Universin</span><br><span class="accent-g">me Duart e Tua</span></h1>
+  <p class="hero-sub">Krijo sistemet tua diellore, shiko si funksionon graviteti, trajektoren dhe lëvizjen orbitale — interaktivisht dhe në kohë reale.</p>
+  <div class="hero-btns">
+    <a href="#simulation" class="btn-p">🚀 Nis Simulimin</a>
+    <a href="#education" class="btn-s">📚 Mëso Fizikën</a>
   </div>
-
-  <div class="hero-scroll-hint">
-    <span>Rripo poshtë</span>
-    <div class="scroll-line"></div>
-  </div>
+  <div class="scroll-hint"><span>Rripo poshtë</span><div class="scroll-line"></div></div>
 </section>
 
-<!-- ===================== ABOUT / PARALLAX ===================== -->
-<section id="parallax-section">
-  <div class="parallax-inner">
-    <div class="parallax-text reveal from-left">
-      <div class="section-label">Parimet themelore</div>
-      <h2 class="section-heading">Çfarë na mban bashkë? Graviteti.</h2>
-      <div class="section-body">
-        <p>Graviteti është forca që i tërheq të gjitha trupat me masë ndaj njëri-tjetrit. Sa më e madhe masa, aq më e fortë tërheqja — kjo është arsyeja që Dielli mban nën kontroll gjithë sistemin tonë diellor.</p>
-        <p>Në simulimin tonë, çdo trup qiellor i përgjigjet ligjit të gravitetit të Njutonit: <em>F = G × m₁ × m₂ / r²</em>. Eksperimento me masa dhe shpejtësi të ndryshme dhe shiko si ndryshojnë trajektoria dhe orbitat.</p>
+<!-- ABOUT -->
+<section id="about" class="section">
+  <div class="about-in">
+    <div class="rv fl">
+      <div class="sec-label">Parimet Themelore</div>
+      <h2 class="sec-h">Çfarë na mban bashkë? Graviteti.</h2>
+      <div class="sec-p">
+        <p>Graviteti është forca që tërheq të gjitha trupat me masë ndaj njëri-tjetrit. Sa më e madhe masa, aq më e fortë tërheqja — kjo është arsyeja pse Dielli mban kontrollin e gjithë sistemit tonë diellor.</p>
+        <p style="margin-top:1rem">Çdo trup qiellor ndjek ligjin e Njutonit: <em>F = G × m₁ × m₂ / r²</em>. Eksperimento me masa dhe shpejtësi të ndryshme dhe shiko si ndryshojnë trajektoria dhe orbitat!</p>
       </div>
     </div>
-    <div class="parallax-visual reveal from-right" data-parallax="-0.05">
+    <div class="rv fr">
       <div class="solar-art">
-        <div class="art-orbit art-orbit-1"></div>
-        <div class="art-orbit art-orbit-2"></div>
-        <div class="art-orbit art-orbit-3"></div>
+        <div class="art-ring art-ring1"></div>
+        <div class="art-ring art-ring2"></div>
+        <div class="art-ring art-ring3"></div>
         <div class="art-sun"></div>
         <div class="art-planet ap1"></div>
         <div class="art-planet ap2"></div>
@@ -1483,1518 +385,997 @@ footer {
   </div>
 </section>
 
-<!-- ===================== FEATURES ===================== -->
-<section id="features">
-  <div class="features-header reveal">
-    <div class="section-label" style="justify-content:center;margin-bottom:0.75rem">Veçoritë</div>
-    <h2 class="section-heading" style="font-size:clamp(1.8rem,4vw,2.5rem)">Platforma e plotë e eksplorimit</h2>
+<!-- FEATURES -->
+<section id="features" class="section">
+  <div class="rv" style="text-align:center">
+    <div class="sec-label" style="justify-content:center">Veçoritë</div>
+    <h2 class="sec-h" style="font-size:clamp(1.6rem,3.5vw,2.3rem)">Platforma e plotë e eksplorimit</h2>
   </div>
-  <div class="features-grid reveal-stagger">
-    <div class="feature-card">
-      <div class="feature-icon fi-cyan">🌐</div>
-      <div class="feature-title">Graviteti në Kohë Reale</div>
-      <p class="feature-desc">Simulim fizik i saktë bazuar në ligjin e gravitetit universal të Njutonit me integrimi numerik stabil.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon fi-gold">🛸</div>
-      <div class="feature-title">Trupat Interaktivë</div>
-      <p class="feature-desc">Shto, tërhiq, dhe poziciono trupat qiellorë me maus. Ndryshon masën dhe shpejtësinë fillestare në çdo moment.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon fi-purple">📊</div>
-      <div class="feature-title">Të Dhëna Live</div>
-      <p class="feature-desc">Shiko pozicionin, shpejtësinë dhe forcën e gravitetit të secilit trup në çdo moment të simulimit.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon fi-cyan">✨</div>
-      <div class="feature-title">Trajektore Vizuale</div>
-      <p class="feature-desc">Vizualizimet e trajektoreve tregojnë shtigjet e kryera — orbitë eliptike, hiperbolike, parabolike.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon fi-gold">⚡</div>
-      <div class="feature-title">Vektorët e Forcës</div>
-      <p class="feature-desc">Aktivizo shfaqjen e vektorëve të shpejtësisë dhe forcës mbi çdo trup për kuptim vizual të fizikës.</p>
-    </div>
-    <div class="feature-card">
-      <div class="feature-icon fi-purple">🎛️</div>
-      <div class="feature-title">Sistem Presetesh</div>
-      <p class="feature-desc">Ngarko konfigurime të gatshme si Sistemi Diellor, Tokë dhe Hënë, Yll i vetëm, dhe shumë të tjera.</p>
-    </div>
+  <div class="feat-grid rvs">
+    <div class="feat-card fc-c"><div class="feat-ico fi-c">🌐</div><div class="feat-title">Tërhiq & Lësho Planeta</div><p class="feat-desc">Tërhiq mausin nga trupi për të vendosur drejtimin dhe shpejtësinë fillestare — si pHET. Shiko satellin tënd të nisë orbitën!</p></div>
+    <div class="feat-card fc-g"><div class="feat-ico fi-g">🛸</div><div class="feat-title">Graviteti Realist</div><p class="feat-desc">Integrimi numerik i saktë. Çdo trup tërheq çdo tjetrin sipas ligjit të Njutonit — në kohë reale me 60 kuadra/sekondë.</p></div>
+    <div class="feat-card fc-p"><div class="feat-ico fi-p">💥</div><div class="feat-title">Bashkime & Shuarje</div><p class="feat-desc">Kur dy trupa përplasen, bashkohen duke ruajtur masën dhe impulsin. Shiko si rriten trupat me çdo bashkim!</p></div>
+    <div class="feat-card fc-c"><div class="feat-ico fi-c">✨</div><div class="feat-title">Trajektore Vizuale</div><p class="feat-desc">Gjurmët e ndritshme tregojnë rrugën e çdo trupi — orbitë cirkulare, eliptike, parabolike ose haotike.</p></div>
+    <div class="feat-card fc-g"><div class="feat-ico fi-g">⚡</div><div class="feat-title">Vektorët e Shpejtësisë</div><p class="feat-desc">Aktivizo shigjetat e shpejtësisë dhe forcës për të parë fizikën vizualisht — ideal për të mësuar.</p></div>
+    <div class="feat-card fc-p"><div class="feat-ico fi-p">🎛️</div><div class="feat-title">6 Sisteme të Gatshme</div><p class="feat-desc">Sistemi Diellor, Tokë-Hënë, Sistemi Binar, Tre Trupat dhe shumë të tjera — ngarko me një klikim.</p></div>
   </div>
 </section>
 
-<!-- ===================== STATS BAR ===================== -->
-<div id="stats-bar">
-  <div class="stats-inner reveal-stagger">
-    <div>
-      <div class="stat-num" data-count="8">0</div>
-      <div class="stat-label">Planetë të Simuluar</div>
-    </div>
-    <div>
-      <div class="stat-num" data-count="6">0</div>
-      <div class="stat-label">Sisteme Preset</div>
-    </div>
-    <div>
-      <div class="stat-num" data-count="60">0</div>
-      <div class="stat-label">Kuadra / Sekondë</div>
-    </div>
-    <div>
-      <div class="stat-num" data-count="100">0</div>
-      <div class="stat-label">% Interaktive</div>
-    </div>
+<!-- STATS -->
+<div id="stats" class="section">
+  <div class="stats-in rvs">
+    <div><div class="stat-n" data-count="8">0</div><div class="stat-l">Planeta Simuluar</div></div>
+    <div><div class="stat-n" data-count="6">0</div><div class="stat-l">Sisteme Preset</div></div>
+    <div><div class="stat-n" data-count="60">0</div><div class="stat-l">Kuadra / Sekondë</div></div>
+    <div><div class="stat-n" data-count="100">0</div><div class="stat-l">% Interaktive</div></div>
   </div>
 </div>
 
-<!-- ===================== PLANET PARADE ===================== -->
-<section id="planet-parade">
-  <div class="parade-title-center reveal">
-    <div class="section-label" style="justify-content:center;margin-bottom:0.75rem">Eksplorimi</div>
-    <h2 class="section-heading" style="font-size:clamp(1.8rem,4vw,2.5rem)">Planetët e Sistemit Diellor</h2>
+<!-- PLANET PARADE -->
+<section id="parade" class="section">
+  <div class="parade-inner rv" style="text-align:center">
+    <div class="sec-label" style="justify-content:center">Eksplorimi</div>
+    <h2 class="sec-h" style="font-size:clamp(1.6rem,3.5vw,2.3rem)">Planetët e Sistemit Diellor</h2>
   </div>
-  <div class="planet-strip">
-    <div class="planet-strip-inner" id="planet-strip-inner">
-      <!-- Planets generated by JS -->
-    </div>
-  </div>
+  <div class="pstrip"><div class="pstrip-inner" id="pstrip"></div></div>
 </section>
 
-<!-- ===================== SIMULATION ===================== -->
-<section id="simulation-section">
-  <div class="sim-header reveal">
-    <div class="section-label" style="justify-content:center;margin-bottom:0.75rem">Simulimi Kryesor</div>
-    <h2 class="section-heading" style="font-size:clamp(1.8rem,4vw,2.5rem)">Laboratori Kozmik</h2>
-    <p style="color:var(--text-dim);max-width:500px;margin:0 auto;font-size:0.95rem">Klikoni në hapësirë për të shtuar trupa qiellorë. Tërhiqini me maus. Ndryshoni parametrat nga panelet anësore.</p>
+<!-- SIMULATION -->
+<section id="simulation" class="section">
+  <div class="sim-title rv">
+    <div class="sec-label" style="justify-content:center">Simulimi Kryesor</div>
+    <h2 class="sec-h" style="font-size:clamp(1.6rem,3.5vw,2.3rem)">Laboratori Kozmik</h2>
+    <p style="color:var(--textd);max-width:540px;margin:.5rem auto 0;font-size:.92rem">
+      <strong style="color:var(--white)">Klikoni + tërhiqni</strong> për të shtuar trupin me shpejtësi nisëse.
+      <strong style="color:var(--white)">Dy-klikoni</strong> hapësirën boshe për shtim të shpejtë.
+      <strong style="color:var(--white)">Rrotulloni scroll</strong> për zoom.
+      <span class="kbd-hint">SPACE</span> nis/ndal · <span class="kbd-hint">R</span> rifillo · <span class="kbd-hint">DEL</span> fshij
+    </p>
   </div>
 
-  <div class="sim-layout">
-    <!-- LEFT PANEL -->
-    <div class="sim-panel sim-panel-left">
-      <div class="panel-header">Kontrollet</div>
-      <div class="panel-body">
-        <div class="panel-section">
-          <button class="ctrl-btn ctrl-btn-play" id="btn-play" style="width:100%;justify-content:center;margin-bottom:8px">▶ Nis Simulimin</button>
-          <button class="ctrl-btn ctrl-btn-reset" id="btn-reset" style="width:100%;justify-content:center;margin-bottom:8px">⟳ Rifillo</button>
-          <button class="ctrl-btn ctrl-btn-add" id="btn-add" style="width:100%;justify-content:center">＋ Shto Trup Qiellor</button>
+  <div class="sim-wrap">
+    <!-- LEFT -->
+    <div class="sim-panel side-l">
+      <div class="ph">Kontrollet</div>
+      <div class="pb">
+        <div class="psec">
+          <button class="cb cb-play" id="bp" style="width:100%;justify-content:center;margin-bottom:7px">▶ Nis Simulimin</button>
+          <button class="cb cb-reset" id="br" style="width:100%;justify-content:center;margin-bottom:7px">⟳ Rifillo</button>
+          <button class="cb cb-add" id="ba" style="width:100%;justify-content:center">＋ Shto Trup</button>
         </div>
-
-        <div class="panel-section">
-          <div class="param-label">Shpejtësia e Simulimit</div>
-          <div class="speed-btns" id="speed-btns">
-            <button class="speed-btn" data-speed="0.25">¼×</button>
-            <button class="speed-btn" data-speed="0.5">½×</button>
-            <button class="speed-btn active" data-speed="1">1×</button>
-            <button class="speed-btn" data-speed="2">2×</button>
-            <button class="speed-btn" data-speed="4">4×</button>
-          </div>
-        </div>
-
-        <div class="panel-section">
-          <div class="param-label">
-            <span>Konstanta e Gravitetit (G)</span>
-            <span class="param-value" id="g-val">100</span>
-          </div>
-          <input type="range" class="slider-input" id="g-slider" min="10" max="500" value="100" step="10">
-          <div class="param-label">
-            <span>Masa e Trupit të Ri</span>
-            <span class="param-value" id="mass-val">30</span>
-          </div>
-          <input type="range" class="slider-input" id="mass-slider" min="1" max="200" value="30" step="1">
-          <div class="param-label">
-            <span>Radiu i Vizual</span>
-            <span class="param-value" id="radius-val">15</span>
-          </div>
-          <input type="range" class="slider-input" id="radius-slider" min="4" max="40" value="15" step="1">
-        </div>
-
-        <div class="panel-section">
-          <div class="param-label" style="margin-bottom:0.75rem">Ngjyra e Trupit</div>
-          <div class="color-picker-row" id="color-picker">
-            <div class="color-dot active" data-color="#00e5ff" style="background:#00e5ff"></div>
-            <div class="color-dot" data-color="#ffd700" style="background:#ffd700"></div>
-            <div class="color-dot" data-color="#ff6b35" style="background:#ff6b35"></div>
-            <div class="color-dot" data-color="#7c3aed" style="background:#7c3aed"></div>
-            <div class="color-dot" data-color="#00e676" style="background:#00e676"></div>
-            <div class="color-dot" data-color="#ff3860" style="background:#ff3860"></div>
-            <div class="color-dot" data-color="#f8f9fa" style="background:#f8f9fa"></div>
+        <div class="psec">
+          <div class="plbl">Shpejtësia</div>
+          <div class="spbtns" id="spbtns">
+            <button class="spb" data-s=".25">¼×</button>
+            <button class="spb" data-s=".5">½×</button>
+            <button class="spb on" data-s="1">1×</button>
+            <button class="spb" data-s="2">2×</button>
+            <button class="spb" data-s="4">4×</button>
           </div>
         </div>
-
-        <div class="panel-section">
-          <div class="toggle-row">
-            <span>Shfaq Trajektoren</span>
-            <label class="toggle">
-              <input type="checkbox" id="toggle-trail" checked>
-              <div class="toggle-track"></div>
-              <div class="toggle-thumb"></div>
-            </label>
+        <div class="psec">
+          <div class="plbl"><span>Graviteti (G)</span><span class="pval" id="gv">100</span></div>
+          <input type="range" class="sl" id="gsl" min="10" max="500" value="100" step="10">
+          <div class="plbl"><span>Masa e Re</span><span class="pval" id="mv">30</span></div>
+          <input type="range" class="sl" id="msl" min="1" max="200" value="30">
+          <div class="plbl"><span>Rrezja Vizuale</span><span class="pval" id="rv2">14</span></div>
+          <input type="range" class="sl" id="rsl" min="4" max="40" value="14">
+        </div>
+        <div class="psec">
+          <div class="plbl" style="margin-bottom:.55rem">Ngjyra</div>
+          <div class="cprow" id="cpick">
+            <div class="cdot on" data-c="#4af0ff" style="background:#4af0ff"></div>
+            <div class="cdot" data-c="#ffd700" style="background:#ffd700"></div>
+            <div class="cdot" data-c="#ff7030" style="background:#ff7030"></div>
+            <div class="cdot" data-c="#a78bfa" style="background:#a78bfa"></div>
+            <div class="cdot" data-c="#4fffb0" style="background:#4fffb0"></div>
+            <div class="cdot" data-c="#ff5577" style="background:#ff5577"></div>
+            <div class="cdot" data-c="#f0f0f8" style="background:#f0f0f8"></div>
           </div>
-          <div class="toggle-row">
-            <span>Shfaq Shpejtësinë</span>
-            <label class="toggle">
-              <input type="checkbox" id="toggle-vel">
-              <div class="toggle-track"></div>
-              <div class="toggle-thumb"></div>
-            </label>
-          </div>
-          <div class="toggle-row">
-            <span>Shfaq Forcën</span>
-            <label class="toggle">
-              <input type="checkbox" id="toggle-force">
-              <div class="toggle-track"></div>
-              <div class="toggle-thumb"></div>
-            </label>
-          </div>
-          <div class="toggle-row">
-            <span>Etiketat e Trupave</span>
-            <label class="toggle">
-              <input type="checkbox" id="toggle-labels" checked>
-              <div class="toggle-track"></div>
-              <div class="toggle-thumb"></div>
-            </label>
-          </div>
+        </div>
+        <div class="psec">
+          <div class="trow"><span>Trajektore</span><label class="tog"><input type="checkbox" id="tt" checked><div class="tog-track"></div><div class="tog-thumb"></div></label></div>
+          <div class="trow"><span>Shpejtësia (shigjeta)</span><label class="tog"><input type="checkbox" id="tv"><div class="tog-track"></div><div class="tog-thumb"></div></label></div>
+          <div class="trow"><span>Forca (shigjeta)</span><label class="tog"><input type="checkbox" id="tf"><div class="tog-track"></div><div class="tog-thumb"></div></label></div>
+          <div class="trow"><span>Etiketat</span><label class="tog"><input type="checkbox" id="tl" checked><div class="tog-track"></div><div class="tog-thumb"></div></label></div>
+          <div class="trow"><span>Rrathët e Orbitës</span><label class="tog"><input type="checkbox" id="tor"><div class="tog-track"></div><div class="tog-thumb"></div></label></div>
         </div>
       </div>
     </div>
 
     <!-- CANVAS -->
     <div>
-      <div class="canvas-wrapper" id="canvas-wrapper">
-        <canvas id="simCanvas"></canvas>
-        <div class="canvas-overlay-top">
-          <div class="sim-status" id="sim-status">
-            <div class="status-dot paused" id="status-dot"></div>
-            <span id="status-text">I Ndaluar</span>
-          </div>
-          <div class="sim-time-display" id="sim-time">t = 0.00 s</div>
+      <div class="canvas-box" id="cbox">
+        <canvas id="C"></canvas>
+        <div class="hud-top">
+          <div class="hud-status" id="hstat"><div class="hud-dot off" id="hdot"></div><span id="htxt">I Ndaluar</span></div>
+          <div class="hud-time" id="htime">t = 0.00 s</div>
         </div>
-        <div class="canvas-overlay-bottom">
-          <button class="ctrl-btn ctrl-btn-play" id="btn-play2">▶ Nis</button>
-          <button class="ctrl-btn ctrl-btn-pause" id="btn-pause">⏸ Ndalo</button>
-          <button class="ctrl-btn ctrl-btn-reset" id="btn-reset2">⟳ Rifillo</button>
-          <button class="ctrl-btn ctrl-btn-add" id="btn-add2">＋ Shto</button>
-          <button class="ctrl-btn ctrl-btn-reset" id="btn-clear" style="color:var(--red);border-color:rgba(255,56,96,0.3)">🗑 Fshij</button>
+        <div class="hud-btm">
+          <button class="cb cb-play" id="bp2">▶ Nis</button>
+          <button class="cb cb-pause" id="bpa">⏸ Ndalo</button>
+          <button class="cb cb-reset" id="br2">⟳ Rifillo</button>
+          <button class="cb cb-add" id="ba2">＋ Shto</button>
+          <button class="cb cb-del" id="bclr">🗑 Fshij Të Gjitha</button>
         </div>
-        <div class="collision-flash" id="collision-flash"></div>
-        <div class="gravity-waves" id="gravity-waves">
-          <div class="gwave"></div>
-          <div class="gwave"></div>
-          <div class="gwave"></div>
-        </div>
+        <div class="launch-hint" id="lhint">📐 Tërhiq për të vendosur shpejtësinë fillestare!</div>
+        <div class="cflash" id="cflash"></div>
+        <div class="gwaves"><div class="gw"></div><div class="gw"></div><div class="gw"></div></div>
       </div>
     </div>
 
-    <!-- RIGHT PANEL -->
-    <div class="sim-panel sim-panel-right">
-      <div class="panel-header">Trupi i Zgjedhur</div>
-      <div class="panel-body">
-        <div id="selected-info">
-          <div class="no-selection">
-            <div class="no-selection-icon">🌍</div>
-            <p>Zgjidh një trup qiellor duke klikuar mbi të për të parë detajet e tij</p>
-          </div>
-        </div>
+    <!-- RIGHT -->
+    <div class="sim-panel side-r">
+      <div class="ph">Trupi i Zgjedhur</div>
+      <div class="pb">
+        <div id="selinfo"><div class="nosel"><div class="nosel-ico">🌍</div><p>Klikoni mbi një trup qiellor për të parë detajet</p></div></div>
       </div>
-
-      <div class="panel-header" style="margin-top:0;border-top:1px solid var(--border)">Trupat Qiellorë</div>
-      <div class="panel-body" style="padding-top:0.75rem">
-        <ul class="body-list" id="body-list">
-          <li style="color:var(--text-dim);font-size:0.82rem;padding:0.5rem">Asnjë trup i shtuar ende.</li>
-        </ul>
+      <div class="ph" style="border-top:1px solid var(--border)">Trupat Qiellorë</div>
+      <div class="pb" style="padding-top:.65rem">
+        <ul class="blist" id="blist"><li style="color:var(--textd);font-size:.8rem;padding:.4rem">Asnjë trup ende.</li></ul>
       </div>
-
-      <div class="panel-header" style="margin-top:0;border-top:1px solid var(--border)">Statistikat</div>
-      <div class="panel-body">
-        <div class="info-box">
-          <div class="info-row">
-            <span>Numri i Trupave</span>
-            <span class="info-row-val" id="stat-count">0</span>
-          </div>
-          <div class="info-row">
-            <span>Masa Totale</span>
-            <span class="info-row-val" id="stat-total-mass">0</span>
-          </div>
-          <div class="info-row">
-            <span>Energjia Totale</span>
-            <span class="info-row-val" id="stat-energy">0</span>
-          </div>
+      <div class="ph" style="border-top:1px solid var(--border)">Statistikat</div>
+      <div class="pb">
+        <div class="ibox">
+          <div class="irow"><span>Numri i Trupave</span><span class="ival" id="scount">0</span></div>
+          <div class="irow"><span>Masa Totale</span><span class="ival" id="stmass">0</span></div>
+          <div class="irow"><span>Energia Kinetike</span><span class="ival" id="senergy">0</span></div>
+          <div class="irow"><span>Impulsi Total</span><span class="ival" id="smom">0</span></div>
         </div>
-        <div class="info-box">
-          <div class="info-box-title">🎯 Çfarë po ndodh?</div>
-          <p style="font-size:0.8rem;color:var(--text-dim);line-height:1.7" id="whats-happening">Ngarko një preset ose shto trupa qiellorë për të parë fizikën në veprim.</p>
+        <div class="ibox">
+          <div class="iboxtitle">🎯 Çfarë po ndodh?</div>
+          <p style="font-size:.78rem;color:var(--textd);line-height:1.75" id="whatshap">Ngarko një preset ose shto trupa qiellorë për të filluar.</p>
+        </div>
+        <div class="ibox" style="margin-bottom:0">
+          <div class="iboxtitle">⌨️ Shkurtesat</div>
+          <div style="font-size:.74rem;color:var(--textd);line-height:1.9">
+            <div><span class="kbd-hint">SPACE</span> Nis / Ndalo</div>
+            <div><span class="kbd-hint">R</span> Rifillo</div>
+            <div><span class="kbd-hint">DEL</span> Fshij të zgjedhur</div>
+            <div><span class="kbd-hint">Scroll</span> Zoom brenda/jashtë</div>
+            <div><span class="kbd-hint">Tërhiq</span> Hapësirën për të lëvizur</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Mobile panel -->
-  <div class="sim-panel-mobile sim-panel" style="max-width:100%;margin-top:1rem">
-    <div class="mobile-tabs">
-      <button class="mobile-tab active" data-tab="kontrollet">Kontrollet</button>
-      <button class="mobile-tab" data-tab="parametrat">Parametrat</button>
-      <button class="mobile-tab" data-tab="info">Info</button>
+  <!-- MOBILE PANEL -->
+  <div class="mob-panel" style="max-width:100%;margin-top:1rem">
+    <div class="mob-tabs">
+      <button class="mob-tab on" data-t="ctrl">Kontrollet</button>
+      <button class="mob-tab" data-t="param">Parametrat</button>
+      <button class="mob-tab" data-t="info">Info</button>
     </div>
-    <div class="mobile-tab-content active" id="tab-kontrollet">
-      <div style="display:flex;flex-wrap:wrap;gap:0.75rem">
-        <button class="ctrl-btn ctrl-btn-play" id="m-play" style="flex:1">▶ Nis</button>
-        <button class="ctrl-btn ctrl-btn-pause" id="m-pause" style="flex:1">⏸ Ndalo</button>
-        <button class="ctrl-btn ctrl-btn-reset" id="m-reset" style="flex:1">⟳ Rifillo</button>
-        <button class="ctrl-btn ctrl-btn-add" id="m-add" style="flex:1">＋ Shto</button>
+    <div class="mob-tc on" id="tc-ctrl">
+      <div style="display:flex;flex-wrap:wrap;gap:.65rem">
+        <button class="cb cb-play" id="mp" style="flex:1">▶ Nis</button>
+        <button class="cb cb-pause" id="mpa" style="flex:1">⏸ Ndalo</button>
+        <button class="cb cb-reset" id="mr" style="flex:1">⟳ Rifillo</button>
+        <button class="cb cb-add" id="ma" style="flex:1">＋ Shto</button>
       </div>
-      <div style="margin-top:1rem">
-        <div class="toggle-row">
-          <span>Trajektore</span>
-          <label class="toggle"><input type="checkbox" id="m-trail" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
-        </div>
-        <div class="toggle-row">
-          <span>Vektorë</span>
-          <label class="toggle"><input type="checkbox" id="m-vel"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
-        </div>
+      <div style="margin-top:.9rem">
+        <div class="trow"><span>Trajektore</span><label class="tog"><input type="checkbox" id="mt" checked><div class="tog-track"></div><div class="tog-thumb"></div></label></div>
+        <div class="trow"><span>Shpejtësia</span><label class="tog"><input type="checkbox" id="mv2"><div class="tog-track"></div><div class="tog-thumb"></div></label></div>
       </div>
     </div>
-    <div class="mobile-tab-content" id="tab-parametrat">
-      <div class="param-label"><span>Graviteti (G)</span><span class="param-value" id="m-g-val">100</span></div>
-      <input type="range" class="slider-input" id="m-g-slider" min="10" max="500" value="100" step="10">
-      <div class="param-label"><span>Masa e Re</span><span class="param-value" id="m-mass-val">30</span></div>
-      <input type="range" class="slider-input" id="m-mass-slider" min="1" max="200" value="30" step="1">
+    <div class="mob-tc" id="tc-param">
+      <div class="plbl"><span>Graviteti (G)</span><span class="pval" id="mgv">100</span></div>
+      <input type="range" class="sl" id="mgsl" min="10" max="500" value="100" step="10">
+      <div class="plbl"><span>Masa e Re</span><span class="pval" id="mmv">30</span></div>
+      <input type="range" class="sl" id="mmsl" min="1" max="200" value="30">
     </div>
-    <div class="mobile-tab-content" id="tab-info">
-      <div id="m-selected-info">
-        <div class="no-selection"><div class="no-selection-icon">🌍</div><p>Klikoni mbi një trup</p></div>
-      </div>
+    <div class="mob-tc" id="tc-info">
+      <div id="mselinfo"><div class="nosel"><div class="nosel-ico">🌍</div><p>Klikoni mbi një trup</p></div></div>
     </div>
   </div>
 </section>
 
-<!-- ===================== PRESETS ===================== -->
-<section id="presets-section">
-  <div class="reveal" style="text-align:center;margin-bottom:1rem">
-    <div class="section-label" style="justify-content:center;margin-bottom:0.75rem">Konfigurimet</div>
-    <h2 class="section-heading" style="font-size:clamp(1.8rem,4vw,2.5rem)">Ngarko Sisteme Qiellorë</h2>
-    <p style="color:var(--text-dim);max-width:500px;margin:0 auto;font-size:0.95rem">Sisteme të gatshme fizike — ngarko me një klikim dhe shiko fizikën menjëherë.</p>
+<!-- PRESETS -->
+<section id="presets" class="section">
+  <div class="rv" style="text-align:center">
+    <div class="sec-label" style="justify-content:center">Konfigurimet</div>
+    <h2 class="sec-h" style="font-size:clamp(1.6rem,3.5vw,2.3rem)">Ngarko Sisteme Qiellorë</h2>
+    <p style="color:var(--textd);max-width:480px;margin:.5rem auto 0;font-size:.9rem">Sisteme të gatshme fizike — ngarko me një klikim dhe shiko fizikën menjëherë.</p>
   </div>
-  <div class="presets-grid reveal-stagger">
-
-    <div class="preset-card" data-preset="solar">
-      <div class="preset-visual">
-        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff9c4,#ffd700,#ff8c00);box-shadow:0 0 20px rgba(255,215,0,0.5)"></div>
-        <div style="position:absolute;top:10px;left:10px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#93c5fd,#1d4ed8);box-shadow:0 0 8px rgba(147,197,253,0.6)"></div>
-        <div style="position:absolute;bottom:8px;right:5px;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#6ee7b7,#047857);box-shadow:0 0 8px rgba(110,231,183,0.5)"></div>
-        <div style="position:absolute;top:8px;right:8px;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fca5a5,#991b1b)"></div>
+  <div class="pgrid rvs">
+    <div class="pcard" data-p="solar">
+      <div class="pvis">
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fffacc,#ffd700,#ff8c00);box-shadow:0 0 18px rgba(255,215,0,.5)"></div>
+        <div style="position:absolute;top:8px;left:8px;width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#90c0ff,#1a3aaa)"></div>
+        <div style="position:absolute;bottom:6px;right:4px;width:15px;height:15px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#60e0a0,#0a5030)"></div>
+        <div style="position:absolute;top:7px;right:7px;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ffb0a0,#882010)"></div>
       </div>
-      <div class="preset-title">Sistemi Diellor</div>
-      <p class="preset-desc">Yll qendror me 4 planeta në orbita cirkulare</p>
-      <div class="preset-tag">⭐ Klasik</div>
+      <div class="ptitle">Sistemi Diellor</div>
+      <p class="pdesc">Yll qendror me 4 planeta në orbita cirkulare</p>
+      <div class="ptag">⭐ Klasik</div>
     </div>
-
-    <div class="preset-card" data-preset="earth-moon">
-      <div class="preset-visual">
-        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:50px;height:50px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#60a5fa,#1e40af,#020c2e);box-shadow:0 0 20px rgba(96,165,250,0.4)"></div>
-        <div style="position:absolute;bottom:12px;right:10px;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#f1f5f9,#94a3b8,#1e293b);box-shadow:0 0 10px rgba(241,245,249,0.3)"></div>
+    <div class="pcard" data-p="earth-moon">
+      <div class="pvis">
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#60a0fa,#1030a0,#010c20);box-shadow:0 0 16px rgba(80,140,250,.35)"></div>
+        <div style="position:absolute;bottom:10px;right:8px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#eef0f4,#8090a0,#1a2030)"></div>
       </div>
-      <div class="preset-title">Toka dhe Hëna</div>
-      <p class="preset-desc">Sistemi Tokë-Hënë me orbitë reale proporcionale</p>
-      <div class="preset-tag">🌕 Familjar</div>
+      <div class="ptitle">Toka dhe Hëna</div>
+      <p class="pdesc">Sistemi Tokë-Hënë me orbitë proporcionale</p>
+      <div class="ptag">🌕 Familjar</div>
     </div>
-
-    <div class="preset-card" data-preset="binary">
-      <div class="preset-visual">
-        <div style="position:absolute;top:50%;left:20%;transform:translate(-50%,-50%);width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fef08a,#ca8a04,#431407);box-shadow:0 0 20px rgba(202,138,4,0.5)"></div>
-        <div style="position:absolute;top:50%;right:20%;transform:translate(50%,-50%);width:32px;height:32px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fda4af,#be123c,#3b0010);box-shadow:0 0 20px rgba(190,18,60,0.4)"></div>
+    <div class="pcard" data-p="binary">
+      <div class="pvis">
+        <div style="position:absolute;top:50%;left:18%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fef08a,#ca8a04);box-shadow:0 0 16px rgba(200,140,0,.45)"></div>
+        <div style="position:absolute;top:50%;right:18%;transform:translate(50%,-50%);width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fda4af,#be123c);box-shadow:0 0 16px rgba(190,18,60,.4)"></div>
       </div>
-      <div class="preset-title">Sistemi Binar</div>
-      <p class="preset-desc">Dy yje me masë të ngjashme duke rrotulluar njëri-tjetrin</p>
-      <div class="preset-tag">🌟 Avancuar</div>
+      <div class="ptitle">Sistemi Binar</div>
+      <p class="pdesc">Dy yje duke rrotulluar njëri-tjetrin</p>
+      <div class="ptag">🌟 Avancuar</div>
     </div>
-
-    <div class="preset-card" data-preset="figure8">
-      <div class="preset-visual">
-        <div style="width:80px;height:80px;position:relative;">
-          <div style="position:absolute;top:10px;left:10px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#a78bfa,#6d28d9);box-shadow:0 0 12px rgba(167,139,250,0.5)"></div>
-          <div style="position:absolute;bottom:10px;right:10px;width:20px;height:20px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#34d399,#065f46);box-shadow:0 0 12px rgba(52,211,153,0.5)"></div>
-          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fb923c,#c2410c);box-shadow:0 0 12px rgba(251,146,60,0.5)"></div>
-        </div>
+    <div class="pcard" data-p="three">
+      <div class="pvis">
+        <div style="position:absolute;top:8px;left:18px;width:20px;height:20px;border-radius:50%;background:radial-gradient(#a78bfa,#6d28d9);box-shadow:0 0 10px rgba(167,139,250,.4)"></div>
+        <div style="position:absolute;bottom:8px;right:10px;width:20px;height:20px;border-radius:50%;background:radial-gradient(#34d399,#065f46);box-shadow:0 0 10px rgba(52,211,153,.4)"></div>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:radial-gradient(#fb923c,#c2410c);box-shadow:0 0 10px rgba(251,146,60,.4)"></div>
       </div>
-      <div class="preset-title">Tre Trupat</div>
-      <p class="preset-desc">Problemi klasik i 3 trupave — kaos dhe bukuri</p>
-      <div class="preset-tag">🌀 Kaotik</div>
+      <div class="ptitle">Tre Trupat</div>
+      <p class="pdesc">Problemi klasik i 3 trupave — kaos dhe bukuri</p>
+      <div class="ptag">🌀 Kaotik</div>
     </div>
-
-    <div class="preset-card" data-preset="single">
-      <div class="preset-visual">
-        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:55px;height:55px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fde68a,#f59e0b,#78350f);box-shadow:0 0 30px rgba(245,158,11,0.6)"></div>
+    <div class="pcard" data-p="single">
+      <div class="pvis">
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fde68a,#f59e0b,#78350f);box-shadow:0 0 28px rgba(245,158,11,.5)"></div>
       </div>
-      <div class="preset-title">Yll i Vetëm</div>
-      <p class="preset-desc">Një yll i izoluar — shto planetë sipas dëshirës</p>
-      <div class="preset-tag">☀️ Bazik</div>
+      <div class="ptitle">Yll i Vetëm</div>
+      <p class="pdesc">Yll i izoluar — shto planetë vetë!</p>
+      <div class="ptag">☀️ Bazik</div>
     </div>
-
-    <div class="preset-card" data-preset="chaotic">
-      <div class="preset-visual">
-        <div style="width:80px;height:80px;position:relative;">
-          <div style="position:absolute;top:5px;left:15px;width:16px;height:16px;border-radius:50%;background:radial-gradient(#ff6b6b,#c0392b);box-shadow:0 0 10px rgba(255,107,107,0.5)"></div>
-          <div style="position:absolute;top:20px;right:5px;width:22px;height:22px;border-radius:50%;background:radial-gradient(#a29bfe,#6c5ce7);box-shadow:0 0 10px rgba(162,155,254,0.5)"></div>
-          <div style="position:absolute;bottom:8px;left:5px;width:18px;height:18px;border-radius:50%;background:radial-gradient(#55efc4,#00b894);box-shadow:0 0 10px rgba(85,239,196,0.5)"></div>
-          <div style="position:absolute;bottom:15px;right:15px;width:14px;height:14px;border-radius:50%;background:radial-gradient(#fdcb6e,#e17055);box-shadow:0 0 10px rgba(253,203,110,0.5)"></div>
-        </div>
+    <div class="pcard" data-p="galaxy">
+      <div class="pvis" style="width:80px;height:80px">
+        <div style="position:absolute;top:5px;left:14px;width:15px;height:15px;border-radius:50%;background:radial-gradient(#ff6b6b,#c0392b)"></div>
+        <div style="position:absolute;top:18px;right:4px;width:21px;height:21px;border-radius:50%;background:radial-gradient(#a29bfe,#6c5ce7)"></div>
+        <div style="position:absolute;bottom:6px;left:4px;width:17px;height:17px;border-radius:50%;background:radial-gradient(#55efc4,#00b894)"></div>
+        <div style="position:absolute;bottom:14px;right:14px;width:13px;height:13px;border-radius:50%;background:radial-gradient(#fdcb6e,#e17055)"></div>
       </div>
-      <div class="preset-title">Galaksi e Vogël</div>
-      <p class="preset-desc">Shumë trupa me masa të ndryshme — dinamikë kaotike</p>
-      <div class="preset-tag">💫 Kompleks</div>
+      <div class="ptitle">Galaksi e Vogël</div>
+      <p class="pdesc">Shumë trupa — dinamikë kaotike!</p>
+      <div class="ptag">💫 Kompleks</div>
     </div>
-
   </div>
 </section>
 
-<!-- ===================== EDUCATION ===================== -->
-<section id="education-section">
-  <div class="education-inner">
-    <div class="reveal" style="text-align:center;margin-bottom:1rem">
-      <div class="section-label" style="justify-content:center;margin-bottom:0.75rem">Fizika</div>
-      <h2 class="section-heading" style="font-size:clamp(1.8rem,4vw,2.5rem)">Kuptimi i Universit</h2>
-      <p style="color:var(--text-dim);max-width:520px;margin:0 auto;font-size:0.95rem">Mëso konceptet themelore të mekanikës qiellore përmes shpjegimeve të qarta dhe ilustrimeve interaktive.</p>
+<!-- EDUCATION -->
+<section id="education" class="section">
+  <div class="edu-in">
+    <div class="rv" style="text-align:center">
+      <div class="sec-label" style="justify-content:center">Fizika</div>
+      <h2 class="sec-h" style="font-size:clamp(1.6rem,3.5vw,2.3rem)">Kuptimi i Universit</h2>
+      <p style="color:var(--textd);max-width:500px;margin:.5rem auto 0;font-size:.9rem">Konceptet themelore të mekanikës qiellore — shpjegime të qarta për klasën 7.</p>
     </div>
-    <div class="edu-grid reveal-stagger">
+    <div class="edu-grid rvs">
       <div class="edu-card">
-        <div class="edu-card-top">
-          <div class="edu-icon">⚖️</div>
-          <div class="edu-card-title">Ligji i Gravitetit Universal</div>
-        </div>
-        <div class="edu-card-body">
-          <p>Nëntori i vitit 1687, Isak Njutoni publikoi ligjin e tij madhështor: çdo objekt me masë tërhiqet ndaj çdo objekti tjetër me masë.</p>
+        <div class="edu-top"><div class="edu-ico">⚖️</div><div class="edu-title">Ligji i Gravitetit</div></div>
+        <div class="edu-body">
+          <p>Isak Njutoni (1687) zbuloi se çdo objekt me masë tërhiqet ndaj çdo tjetri.</p>
           <div class="edu-formula">F = G × (m₁ × m₂) / r²</div>
-          <p>Ku <em>G</em> është konstanta gravitacionale, <em>m₁</em> dhe <em>m₂</em> janë masat e dy trupave, dhe <em>r</em> është distanca mes tyre. Sa dyfishohet distanca, forca zvogëlohet me faktorin 4.</p>
+          <p><strong style="color:var(--white)">G</strong> = konstanta gravitacionale<br><strong style="color:var(--white)">m₁, m₂</strong> = masat e dy trupave<br><strong style="color:var(--white)">r</strong> = distanca mes tyre</p>
+          <p>Sa dyfishohet distanca → forca zvogëlohet 4 herë!</p>
         </div>
       </div>
       <div class="edu-card">
-        <div class="edu-card-top">
-          <div class="edu-icon">🔄</div>
-          <div class="edu-card-title">Lëvizja Orbitale</div>
-        </div>
-        <div class="edu-card-body">
-          <p>Pse Toka nuk bie mbi Diell? Sepse lëvizet me shpejtësi të mjaftueshme horizontale. Graviteti e "kthelon" rrugën e saj, duke krijuar orbitën.</p>
-          <div class="edu-formula">v_orbitale = √(G × M / r)</div>
-          <p>Kjo është shpejtësia cirkulare orbitale. Nëse shpejtësia është shumë e madhe, planeti ikën. Nëse shumë e vogël, bie spiralisht drejt yllit.</p>
+        <div class="edu-top"><div class="edu-ico">🔄</div><div class="edu-title">Lëvizja Orbitale</div></div>
+        <div class="edu-body">
+          <p>Pse Toka nuk bie mbi Diell? Sepse ka shpejtësi horizontale të mjaftueshme!</p>
+          <div class="edu-formula">v = √(G × M / r)</div>
+          <p>Graviteti "kthelon" rrugën e planetit duke krijuar orbitën. Shpejtësi shumë e madhe → planeti ikën. Shumë e vogël → bie spiralisht.</p>
         </div>
       </div>
       <div class="edu-card">
-        <div class="edu-card-top">
-          <div class="edu-icon">📐</div>
-          <div class="edu-card-title">Ligjet e Keplerit</div>
-        </div>
-        <div class="edu-card-body">
-          <p>Johannes Kepleri zbuloi tre ligje të lëvizjes planetare nga vëzhgimet e Tiho Brahes.</p>
+        <div class="edu-top"><div class="edu-ico">📐</div><div class="edu-title">Ligjet e Keplerit</div></div>
+        <div class="edu-body">
+          <p>Kepleri zbuloi 3 ligje të lëvizjes planetare nga vëzhgimet e Tiho Brahes.</p>
           <div class="edu-formula">T² ∝ a³</div>
-          <p><strong style="color:var(--white)">Ligji I:</strong> Planetët lëvizin në elipse, me yllin në njërin fokus.<br>
-          <strong style="color:var(--white)">Ligji II:</strong> Vija planetit-yll mbulon sipërfaqe të barabarta në kohë të barabarta.<br>
-          <strong style="color:var(--white)">Ligji III:</strong> Katrori i periudhës ∝ kub i gjysmaksit.</p>
+          <p><strong style="color:var(--white)">Ligji I:</strong> Planetët lëvizin në elipse me yllin në fokus.<br>
+          <strong style="color:var(--white)">Ligji II:</strong> Shpejtësia rritet afër yllit.<br>
+          <strong style="color:var(--white)">Ligji III:</strong> Katrori i periudhës = kub i rrjedhës.</p>
         </div>
       </div>
     </div>
-
-    <!-- Tips section -->
-    <div style="margin-top:3rem;background:var(--bg-panel);border:1px solid var(--border);border-radius:var(--radius);padding:2rem;backdrop-filter:blur(20px)" class="reveal">
-      <div class="section-label" style="margin-bottom:1rem">💡 Sugjerime për Eksperiment</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem">
-        <div style="background:var(--cyan-dim);border:1px solid rgba(0,229,255,0.15);border-radius:8px;padding:1rem">
-          <div style="font-family:var(--font-display);font-size:0.65rem;color:var(--cyan);letter-spacing:0.1em;margin-bottom:0.5rem">EKSPERIMENT 1</div>
-          <p style="font-size:0.85rem;color:var(--text);line-height:1.7">Shto një yll masiv dhe pastaj shto një planet — luaj me shpejtësinë fillestare deri sa të gjesh orbitën e qëndrueshme.</p>
-        </div>
-        <div style="background:var(--gold-dim);border:1px solid rgba(255,201,64,0.15);border-radius:8px;padding:1rem">
-          <div style="font-family:var(--font-display);font-size:0.65rem;color:var(--gold);letter-spacing:0.1em;margin-bottom:0.5rem">EKSPERIMENT 2</div>
-          <p style="font-size:0.85rem;color:var(--text);line-height:1.7">Krijo dy yje me masa të barabarta dhe shto planet mes tyre — shiko si e tërheqin ndaj njëri-tjetrit.</p>
-        </div>
-        <div style="background:var(--purple-dim);border:1px solid rgba(124,58,237,0.2);border-radius:8px;padding:1rem">
-          <div style="font-family:var(--font-display);font-size:0.65rem;color:var(--purple);letter-spacing:0.1em;margin-bottom:0.5rem">EKSPERIMENT 3</div>
-          <p style="font-size:0.85rem;color:var(--text);line-height:1.7">Ngarko "Tre Trupat" dhe shiko kaosi të lulëzojë — ky problem nuk ka zgjidhje analitike!</p>
-        </div>
+    <div style="margin-top:2.5rem;background:var(--panel);border:1px solid var(--border);border-radius:var(--r);padding:1.8rem;backdrop-filter:blur(20px)" class="rv">
+      <div class="sec-label" style="margin-bottom:1rem">💡 Eksperimente për të Provuar</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.1rem">
+        <div class="tip-box"><div class="tip-label tc">EKSPERIMENT 1</div><p style="font-size:.83rem;color:var(--text);line-height:1.75">Shto një yll masiv pastaj tërhiq e lësho një planet — provo shpejtësi të ndryshme dhe gjej orbitën e qëndrueshme!</p></div>
+        <div class="tip-box" style="background:rgba(255,208,96,.05);border-color:rgba(255,208,96,.12)"><div class="tip-label tg">EKSPERIMENT 2</div><p style="font-size:.83rem;color:var(--text);line-height:1.75">Ngarko "Sistemi Binar" dhe shto një planet të tretë — shiko si e gjuajnë me gravitetin!</p></div>
+        <div class="tip-box" style="background:rgba(167,139,250,.05);border-color:rgba(167,139,250,.12)"><div class="tip-label tp">EKSPERIMENT 3</div><p style="font-size:.83rem;color:var(--text);line-height:1.75">Ngarko "Tre Trupat" dhe shiko kaosin — ky problem nuk ka zgjidhje matematike!</p></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===================== FOOTER ===================== -->
+<!-- FOOTER -->
 <footer>
-  <div class="footer-inner">
-    <div class="footer-logo">KOZMOSI ✦</div>
-    <div class="footer-note">Platforma shqiptare e fizikës dhe astronomisë — Simulim Interaktiv i Sistemit Diellor</div>
-    <div style="font-size:0.75rem;color:var(--text-dim)">© 2024 · Ndërtuar për Studentë Shqipëtarë</div>
+  <div class="foot-in">
+    <div class="foot-logo">KOZMOSI ✦</div>
+    <div class="foot-note">Platforma shqiptare e fizikës — Simulim Interaktiv</div>
+    <div style="font-size:.72rem;color:var(--textd)">© 2024 · Për Studentë Shqipëtarë</div>
   </div>
 </footer>
 
-<!-- ===================== ADD BODY MODAL ===================== -->
-<div class="modal-overlay" id="modal">
+<!-- MODAL -->
+<div class="moverlay" id="modal">
   <div class="modal">
-    <div class="modal-title">＋ Shto Trup Qiellor</div>
-    <div class="modal-field">
-      <div class="modal-label">Emri i Trupit</div>
-      <input type="text" id="body-name-input" value="Planeti" placeholder="p.sh. Planeti, Yjsori..." style="width:100%;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:6px;padding:10px 14px;color:var(--white);font-family:var(--font-body);font-size:0.95rem;outline:none;transition:border var(--transition)" onfocus="this.style.borderColor='var(--cyan)'" onblur="this.style.borderColor='var(--border)'">
+    <div class="mtitle">＋ Shto Trup Qiellor</div>
+    <div class="mfield">
+      <div class="mlbl">Emri</div>
+      <input type="text" class="minput" id="mname" value="Planeti" placeholder="p.sh. Planeti, Yjsori...">
     </div>
-    <div class="modal-field">
-      <div class="modal-label">Masa <span id="modal-mass-disp">30</span></div>
-      <input type="range" class="slider-input" id="modal-mass" min="1" max="300" value="30" step="1">
+    <div class="mfield">
+      <div class="mlbl">Masa <span id="mmassdisp">30</span></div>
+      <input type="range" class="sl" id="mmass" min="1" max="300" value="30">
     </div>
-    <div class="modal-field">
-      <div class="modal-label">Shpejtësia X Fillestare <span id="modal-vx-disp">0</span></div>
-      <input type="range" class="slider-input" id="modal-vx" min="-200" max="200" value="0" step="5">
+    <div class="mfield">
+      <div class="mlbl">Shpejtësia X <span id="mvxdisp">0</span></div>
+      <input type="range" class="sl" id="mvx" min="-200" max="200" value="0" step="5">
     </div>
-    <div class="modal-field">
-      <div class="modal-label">Shpejtësia Y Fillestare <span id="modal-vy-disp">-80</span></div>
-      <input type="range" class="slider-input" id="modal-vy" min="-200" max="200" value="-80" step="5">
+    <div class="mfield">
+      <div class="mlbl">Shpejtësia Y <span id="mvydisp">-80</span></div>
+      <input type="range" class="sl" id="mvy" min="-200" max="200" value="-80" step="5">
     </div>
-    <div class="modal-field">
-      <div class="modal-label" style="margin-bottom:0.75rem">Ngjyra</div>
-      <div class="color-picker-row" id="modal-color-picker">
-        <div class="color-dot active" data-color="#00e5ff" style="background:#00e5ff"></div>
-        <div class="color-dot" data-color="#ffd700" style="background:#ffd700"></div>
-        <div class="color-dot" data-color="#ff6b35" style="background:#ff6b35"></div>
-        <div class="color-dot" data-color="#7c3aed" style="background:#7c3aed"></div>
-        <div class="color-dot" data-color="#00e676" style="background:#00e676"></div>
-        <div class="color-dot" data-color="#ff3860" style="background:#ff3860"></div>
-        <div class="color-dot" data-color="#f8f9fa" style="background:#f8f9fa"></div>
+    <div class="mfield">
+      <div class="mlbl" style="margin-bottom:.55rem">Ngjyra</div>
+      <div class="cprow" id="mcp">
+        <div class="cdot on" data-c="#4af0ff" style="background:#4af0ff"></div>
+        <div class="cdot" data-c="#ffd700" style="background:#ffd700"></div>
+        <div class="cdot" data-c="#ff7030" style="background:#ff7030"></div>
+        <div class="cdot" data-c="#a78bfa" style="background:#a78bfa"></div>
+        <div class="cdot" data-c="#4fffb0" style="background:#4fffb0"></div>
+        <div class="cdot" data-c="#ff5577" style="background:#ff5577"></div>
+        <div class="cdot" data-c="#f0f0f8" style="background:#f0f0f8"></div>
       </div>
     </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" id="modal-cancel">Anulo</button>
-      <button class="btn-primary" id="modal-confirm">✓ Shto Trupin</button>
+    <div class="mactions">
+      <button class="mbtn-c" id="mcancel">Anulo</button>
+      <button class="btn-p" id="mconfirm">✓ Shto</button>
     </div>
   </div>
 </div>
 
-<!-- Toast notification -->
 <div class="toast" id="toast"></div>
 
 <script>
-/* =============================================
-   STAR FIELD BACKGROUND
-============================================= */
-(function() {
-  const canvas = document.getElementById('star-canvas');
-  const ctx = canvas.getContext('2d');
-  let stars = [];
-  let W, H;
-
-  function resize() {
-    W = canvas.width = window.innerWidth;
-    H = canvas.height = window.innerHeight;
-  }
-
-  function initStars() {
-    stars = [];
-    const count = Math.floor((W * H) / 3000);
-    for (let i = 0; i < count; i++) {
-      stars.push({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        r: Math.random() * 1.5 + 0.2,
-        alpha: Math.random() * 0.8 + 0.1,
-        speed: Math.random() * 0.3 + 0.05,
-        twinkle: Math.random() * Math.PI * 2,
-        twinkleSpeed: Math.random() * 0.02 + 0.005
-      });
-    }
-  }
-
-  let scrollY = 0;
-  window.addEventListener('scroll', () => { scrollY = window.scrollY; });
-
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-    const now = Date.now() * 0.001;
-    for (const s of stars) {
-      s.twinkle += s.twinkleSpeed;
-      const alpha = s.alpha * (0.7 + 0.3 * Math.sin(s.twinkle));
-      ctx.beginPath();
-      ctx.arc(s.x, (s.y - scrollY * s.speed * 0.1 + H * 10) % H, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(200,220,255,${alpha})`;
-      ctx.fill();
-    }
-    requestAnimationFrame(draw);
-  }
-
-  resize();
-  initStars();
-  draw();
-  window.addEventListener('resize', () => { resize(); initStars(); });
+/* ═══════════════════════════════════════════════
+   STARFIELD
+═══════════════════════════════════════════════ */
+(()=>{
+  const c=document.getElementById('starfield'),cx=c.getContext('2d');
+  let stars=[],W,H,sy=0;
+  const resize=()=>{W=c.width=innerWidth;H=c.height=innerHeight};
+  const init=()=>{stars=[];const n=Math.floor(W*H/3200);for(let i=0;i<n;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+.15,a:Math.random()*.8+.1,s:Math.random()*.35+.05,tw:Math.random()*Math.PI*2,ts:Math.random()*.02+.005})};
+  window.addEventListener('scroll',()=>sy=scrollY,{passive:true});
+  const draw=()=>{cx.clearRect(0,0,W,H);for(const s of stars){s.tw+=s.ts;const a=s.a*(.65+.35*Math.sin(s.tw));cx.beginPath();cx.arc(s.x,(s.y-sy*s.s*.1+H*10)%H,s.r,0,Math.PI*2);cx.fillStyle=`rgba(200,220,255,${a})`;cx.fill()}requestAnimationFrame(draw)};
+  resize();init();draw();window.addEventListener('resize',()=>{resize();init()});
 })();
 
-/* =============================================
-   SCROLL ANIMATIONS & PARALLAX
-============================================= */
-(function() {
-  // Reveal on scroll
-  const revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
-  revealEls.forEach(el => observer.observe(el));
-
-  // Stat counters
-  const statNums = document.querySelectorAll('.stat-num[data-count]');
-  const statObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el = entry.target;
-        const target = parseInt(el.dataset.count);
-        let current = 0;
-        const step = target / 40;
-        const interval = setInterval(() => {
-          current = Math.min(current + step, target);
-          el.textContent = Math.round(current) + (target === 100 ? '%' : '+');
-          if (current >= target) clearInterval(interval);
-        }, 35);
-        statObserver.unobserve(el);
-      }
-    });
-  }, { threshold: 0.5 });
-  statNums.forEach(el => statObserver.observe(el));
-
-  // Parallax
-  const parallaxEls = document.querySelectorAll('[data-parallax]');
-  window.addEventListener('scroll', () => {
-    const sy = window.scrollY;
-    parallaxEls.forEach(el => {
-      const speed = parseFloat(el.dataset.parallax);
-      el.style.transform = `translateY(${sy * speed}px)`;
-    });
-  }, { passive: true });
-
-  // Navbar scroll effect
-  const nav = document.getElementById('navbar');
-  window.addEventListener('scroll', () => {
-    nav.style.background = window.scrollY > 50 ? 'rgba(2,5,16,0.98)' : 'rgba(2,5,16,0.85)';
-  }, { passive: true });
+/* ═══════════════════════════════════════════════
+   SCROLL ANIMATIONS
+═══════════════════════════════════════════════ */
+(()=>{
+  const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');obs.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.rv,.rvs').forEach(el=>obs.observe(el));
+  // Counters
+  const co=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const el=e.target,t=+el.dataset.count;let c=0;const step=t/45;const iv=setInterval(()=>{c=Math.min(c+step,t);el.textContent=Math.round(c)+(t===100?'%':'+');if(c>=t)clearInterval(iv)},30);co.unobserve(el)}})},{threshold:.5});
+  document.querySelectorAll('.stat-n[data-count]').forEach(el=>co.observe(el));
+  // Nav
+  window.addEventListener('scroll',()=>{document.getElementById('nav').style.background=scrollY>50?'rgba(6,10,20,.99)':'rgba(6,10,20,.88)';},{passive:true});
+  // Smooth links
+  document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}}));
+  // Parallax hero planets
+  const pels=document.querySelectorAll('.hplanet');
+  const speeds=[.07,.12,.16,.055];
+  window.addEventListener('scroll',()=>{const sy=scrollY;pels.forEach((el,i)=>el.style.transform=`translateY(${sy*speeds[i]}px)`)},{passive:true});
 })();
 
-/* =============================================
-   PLANET PARADE (auto-scroll strip)
-============================================= */
-(function() {
-  const planets = [
-    { name: 'Merkuri', size: 40, bg: 'radial-gradient(circle at 35% 30%,#9ca3af,#374151,#111827)', fact: '88 ditë orbitë', glow: 'rgba(156,163,175,0.4)' },
-    { name: 'Venusi', size: 60, bg: 'radial-gradient(circle at 35% 30%,#fde68a,#d97706,#78350f)', fact: '462°C sipërfaqe', glow: 'rgba(253,230,138,0.4)' },
-    { name: 'Toka', size: 64, bg: 'radial-gradient(circle at 35% 30%,#60a5fa,#1d4ed8,#0f2460)', fact: 'Vendi ynë', glow: 'rgba(96,165,250,0.4)' },
-    { name: 'Marsi', size: 52, bg: 'radial-gradient(circle at 35% 30%,#fca5a5,#dc2626,#450a0a)', fact: '24.6h ditë', glow: 'rgba(252,165,165,0.4)' },
-    { name: 'Jupiteri', size: 100, bg: 'radial-gradient(circle at 35% 30%,#fed7aa,#c2410c,#431407)', fact: '11.2x Toka', glow: 'rgba(254,215,170,0.3)' },
-    { name: 'Saturni', size: 88, bg: 'radial-gradient(circle at 35% 30%,#fde68a,#d97706,#451a03)', fact: '29.5 vite orbitë', glow: 'rgba(253,230,138,0.3)', rings: true },
-    { name: 'Urani', size: 72, bg: 'radial-gradient(circle at 35% 30%,#a7f3d0,#059669,#022c22)', fact: 'Rrotullohet anash', glow: 'rgba(167,243,208,0.3)' },
-    { name: 'Neptuni', size: 68, bg: 'radial-gradient(circle at 35% 30%,#93c5fd,#1e40af,#0a1628)', fact: '165 vite orbitë', glow: 'rgba(147,197,253,0.3)' },
+/* ═══════════════════════════════════════════════
+   PLANET PARADE
+═══════════════════════════════════════════════ */
+(()=>{
+  const planets=[
+    {name:'Merkuri',size:36,bg:'radial-gradient(circle at 35% 30%,#9ca3af,#374151)',glow:'rgba(150,160,170,.35)',fact:'88 ditë / orbitë'},
+    {name:'Venusi',size:54,bg:'radial-gradient(circle at 35% 30%,#fde68a,#d97706)',glow:'rgba(250,200,80,.35)',fact:'462°C sipërfaqe'},
+    {name:'Toka',size:56,bg:'radial-gradient(circle at 35% 30%,#60a5fa,#1d4ed8)',glow:'rgba(80,150,250,.35)',fact:'Vendi ynë 🌍'},
+    {name:'Marsi',size:48,bg:'radial-gradient(circle at 35% 30%,#fca5a5,#dc2626)',glow:'rgba(220,60,60,.3)',fact:'24.6h ditë'},
+    {name:'Jupiteri',size:90,bg:'radial-gradient(circle at 35% 30%,#fed7aa,#c2410c)',glow:'rgba(220,130,60,.25)',fact:'11× Toka'},
+    {name:'Saturni',size:78,bg:'radial-gradient(circle at 35% 30%,#fde68a,#d97706)',glow:'rgba(240,200,80,.25)',rings:true,fact:'29.5 vite / orbitë'},
+    {name:'Urani',size:64,bg:'radial-gradient(circle at 35% 30%,#a7f3d0,#059669)',glow:'rgba(100,220,160,.25)',fact:'Rrotullohet anash'},
+    {name:'Neptuni',size:60,bg:'radial-gradient(circle at 35% 30%,#93c5fd,#1e40af)',glow:'rgba(80,140,220,.25)',fact:'165 vite / orbitë'},
   ];
-
-  const strip = document.getElementById('planet-strip-inner');
-  // Duplicate for seamless loop
-  const all = [...planets, ...planets];
-  strip.innerHTML = all.map(p => `
-    <div class="parade-planet">
-      <div class="pp-sphere" style="width:${p.size}px;height:${p.size}px;background:${p.bg};box-shadow:0 0 ${p.size*0.6}px ${p.glow},inset -${p.size*0.15}px -${p.size*0.15}px ${p.size*0.3}px rgba(0,0,0,0.5)${p.rings ? ';position:relative' : ''}">
-        ${p.rings ? `<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-20deg);width:${p.size*1.7}px;height:${p.size*0.3}px;border:${p.size*0.07}px solid rgba(253,230,138,0.3);border-radius:50%;pointer-events:none"></div>` : ''}
-      </div>
-      <div class="pp-name">${p.name}</div>
-      <div class="pp-fact">${p.fact}</div>
-    </div>
-  `).join('');
+  const strip=document.getElementById('pstrip');
+  const all=[...planets,...planets];
+  strip.innerHTML=all.map(p=>`<div class="pp"><div class="pp-sphere" style="width:${p.size}px;height:${p.size}px;background:${p.bg};box-shadow:0 0 ${Math.round(p.size*.6)}px ${p.glow},inset -${Math.round(p.size*.15)}px -${Math.round(p.size*.15)}px ${Math.round(p.size*.3)}px rgba(0,0,0,.5)">${p.rings?`<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-20deg);width:${Math.round(p.size*1.65)}px;height:${Math.round(p.size*.28)}px;border:${Math.round(p.size*.07)}px solid rgba(253,230,138,.28);border-radius:50%;pointer-events:none"></div>`:''}</div><div class="pp-name">${p.name}</div><div class="pp-fact">${p.fact}</div></div>`).join('');
 })();
 
-/* =============================================
-   PHYSICS SIMULATION ENGINE
-============================================= */
-(function() {
-  const canvas = document.getElementById('simCanvas');
-  const ctx = canvas.getContext('2d');
-  const wrapper = document.getElementById('canvas-wrapper');
+/* ═══════════════════════════════════════════════
+   3D TILT ON CARDS
+═══════════════════════════════════════════════ */
+document.querySelectorAll('.pcard,.feat-card').forEach(c=>{
+  c.addEventListener('mousemove',e=>{const r=c.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,rx=(y-r.height/2)/r.height*6,ry=(r.width/2-x)/r.width*6;c.style.transform=`translateY(-4px) perspective(600px) rotateX(${rx}deg) rotateY(${ry}deg)`});
+  c.addEventListener('mouseleave',()=>c.style.transform='');
+});
 
-  // Simulation state
-  let bodies = [];
-  let running = false;
-  let simTime = 0;
-  let speed = 1;
-  let G = 100;
-  let newMass = 30;
-  let newRadius = 15;
-  let newColor = '#00e5ff';
-  let selectedBody = null;
-  let showTrail = true;
-  let showVel = false;
-  let showForce = false;
-  let showLabels = true;
-  let bodyCounter = 0;
-  let draggingBody = null;
-  let dragOffX = 0, dragOffY = 0;
-  let pendingAddClick = false;
-  let animId = null;
-  let lastTime = null;
-  const TRAIL_LENGTH = 200;
-  const SUBSTEPS = 6;
+/* ═══════════════════════════════════════════════
+   PHYSICS ENGINE
+═══════════════════════════════════════════════ */
+(()=>{
+const canvas=document.getElementById('C');
+const ctx=canvas.getContext('2d');
+const box=document.getElementById('cbox');
 
-  // Camera/zoom
-  let camX = 0, camY = 0;
-  let zoom = 1;
-  let isPanning = false;
-  let panStart = { x: 0, y: 0 };
-  let camStart = { x: 0, y: 0 };
+// ─── State ───
+let bodies=[],running=false,simTime=0,speed=1,G=100;
+let newMass=30,newRadius=14,newColor='#4af0ff';
+let selected=null,bodyId=0;
+let showTrail=true,showVel=false,showForce=false,showLabels=true,showOrbit=false;
+let animId=null,lastTs=null;
+const TRAIL=220,SUBS=8;
 
-  function resize() {
-    const rect = wrapper.getBoundingClientRect();
-    canvas.width = rect.width;
-    canvas.height = rect.height;
+// Drag-to-add state
+let dragAdd=null; // {x,y,active,mx,my}
+
+// Drag-to-move state
+let dragMove=null; // {body,ox,oy}
+
+// Pan state
+let pan=null; // {sx,sy,cx,cy}
+let camX=0,camY=0,zoom=1;
+
+// ─── Resize ───
+function resize(){
+  const r=box.getBoundingClientRect();
+  canvas.width=Math.round(r.width);
+  canvas.height=Math.round(r.height);
+}
+
+// ─── Coordinate helpers ───
+const w2s=(wx,wy)=>({x:(wx+camX)*zoom+canvas.width/2,y:(wy+camY)*zoom+canvas.height/2});
+const s2w=(sx,sy)=>({x:(sx-canvas.width/2)/zoom-camX,y:(sy-canvas.height/2)/zoom-camY});
+
+// ─── Create body ───
+function mkBody(x,y,m,vx,vy,color,name,rad){
+  bodyId++;
+  return{id:bodyId,name:name||`Trup ${bodyId}`,x,y,vx:vx||0,vy:vy||0,ax:0,ay:0,mass:m,radius:rad||Math.max(5,Math.cbrt(m)*2.6),color:color||'#4af0ff',trail:[],alive:true};
+}
+
+// ─── Physics ───
+function forces(){
+  for(const b of bodies){b.ax=0;b.ay=0}
+  for(let i=0;i<bodies.length;i++){
+    for(let j=i+1;j<bodies.length;j++){
+      const a=bodies[i],b=bodies[j];
+      const dx=b.x-a.x,dy=b.y-a.y;
+      const r2=dx*dx+dy*dy+180;
+      const r=Math.sqrt(r2);
+      const f=G*a.mass*b.mass/r2;
+      const fx=f*dx/r,fy=f*dy/r;
+      a.ax+=fx/a.mass;a.ay+=fy/a.mass;
+      b.ax-=fx/b.mass;b.ay-=fy/b.mass;
+    }
   }
+}
 
-  function worldToScreen(wx, wy) {
-    return {
-      x: (wx + camX) * zoom + canvas.width / 2,
-      y: (wy + camY) * zoom + canvas.height / 2
-    };
-  }
-
-  function screenToWorld(sx, sy) {
-    return {
-      x: (sx - canvas.width / 2) / zoom - camX,
-      y: (sy - canvas.height / 2) / zoom - camY
-    };
-  }
-
-  function createBody(x, y, mass, vx, vy, color, name, radius) {
-    bodyCounter++;
-    return {
-      id: bodyCounter,
-      name: name || `Trup ${bodyCounter}`,
-      x, y,
-      vx: vx || 0, vy: vy || 0,
-      ax: 0, ay: 0,
-      mass: mass || 30,
-      radius: radius || Math.max(5, Math.cbrt(mass) * 2.5),
-      color: color || '#00e5ff',
-      trail: [],
-      alive: true
-    };
-  }
-
-  function computeForces() {
-    for (const b of bodies) { b.ax = 0; b.ay = 0; }
-    for (let i = 0; i < bodies.length; i++) {
-      for (let j = i + 1; j < bodies.length; j++) {
-        const a = bodies[i], b = bodies[j];
-        const dx = b.x - a.x, dy = b.y - a.y;
-        const r2 = dx*dx + dy*dy + 200; // softening
-        const r = Math.sqrt(r2);
-        const f = G * a.mass * b.mass / r2;
-        const fx = f * dx / r, fy = f * dy / r;
-        a.ax += fx / a.mass; a.ay += fy / a.mass;
-        b.ax -= fx / b.mass; b.ay -= fy / b.mass;
+function collide(){
+  let hit=false;
+  for(let i=0;i<bodies.length;i++){
+    for(let j=i+1;j<bodies.length;j++){
+      const a=bodies[i],b=bodies[j];
+      if(!a.alive||!b.alive)continue;
+      const dx=b.x-a.x,dy=b.y-a.y;
+      if(dx*dx+dy*dy<(a.radius+b.radius)*(a.radius+b.radius)){
+        const tm=a.mass+b.mass;
+        const nx=(a.x*a.mass+b.x*b.mass)/tm;
+        const ny=(a.y*a.mass+b.y*b.mass)/tm;
+        const nvx=(a.vx*a.mass+b.vx*b.mass)/tm;
+        const nvy=(a.vy*a.mass+b.vy*b.mass)/tm;
+        const keep=a.mass>=b.mass?a:b;
+        const rem=a.mass>=b.mass?b:a;
+        keep.x=nx;keep.y=ny;keep.vx=nvx;keep.vy=nvy;
+        keep.mass=tm;
+        keep.radius=Math.max(keep.radius,rem.radius)*Math.cbrt(tm/Math.max(keep.mass,1)*.75+.25)*1.15;
+        rem.alive=false;
+        if(selected===rem)selected=keep;
+        hit=true;
       }
     }
   }
+  if(hit){bodies=bodies.filter(b=>b.alive);flash()}
+}
 
-  function checkCollisions() {
-    let collided = false;
-    for (let i = 0; i < bodies.length; i++) {
-      for (let j = i + 1; j < bodies.length; j++) {
-        const a = bodies[i], b = bodies[j];
-        const dx = b.x - a.x, dy = b.y - a.y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < a.radius + b.radius) {
-          // Perfectly inelastic collision — merge
-          const totalMass = a.mass + b.mass;
-          const nx = (a.x * a.mass + b.x * b.mass) / totalMass;
-          const ny = (a.y * a.mass + b.y * b.mass) / totalMass;
-          const nvx = (a.vx * a.mass + b.vx * b.mass) / totalMass;
-          const nvy = (a.vy * a.mass + b.vy * b.mass) / totalMass;
-          // Keep bigger body, update it
-          const keep = a.mass >= b.mass ? a : b;
-          const rem  = a.mass >= b.mass ? b : a;
-          keep.x = nx; keep.y = ny;
-          keep.vx = nvx; keep.vy = nvy;
-          keep.mass = totalMass;
-          keep.radius = Math.max(keep.radius, rem.radius) * Math.cbrt(totalMass / keep.mass * 0.8 + 0.2) * 1.1;
-          rem.alive = false;
-          if (selectedBody === rem) selectedBody = keep;
-          collided = true;
-        }
-      }
+function flash(){
+  const f=document.getElementById('cflash');
+  f.classList.add('on');
+  setTimeout(()=>f.classList.remove('on'),130);
+}
+
+function step(dt){
+  const sub=dt/SUBS;
+  for(let s=0;s<SUBS;s++){
+    forces();
+    for(const b of bodies){
+      b.vx+=b.ax*sub;b.vy+=b.ay*sub;
+      b.x+=b.vx*sub;b.y+=b.vy*sub;
+      b.trail.push({x:b.x,y:b.y});
+      if(b.trail.length>TRAIL)b.trail.shift();
     }
-    if (collided) {
-      bodies = bodies.filter(b => b.alive);
-      flashCollision();
+    collide();
+  }
+  simTime+=dt;
+}
+
+// ─── Render ───
+function hex2rgb(h){h=h.replace('#','');return[parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)]}
+function lighten(h,a){const[r,g,b]=hex2rgb(h);return`rgb(${Math.min(255,r+a)},${Math.min(255,g+a)},${Math.min(255,b+a)})`}
+function darken(h,a){const[r,g,b]=hex2rgb(h);return`rgb(${Math.max(0,r-a)},${Math.max(0,g-a)},${Math.max(0,b-a)})`}
+
+function render(){
+  const W=canvas.width,H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  // Background
+  const bg=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,Math.max(W,H)*.7);
+  bg.addColorStop(0,'#060c1a');bg.addColorStop(1,'#010408');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+
+  ctx.save();
+
+  // Orbit circles
+  if(showOrbit){
+    for(const b of bodies){
+      if(b.mass<100)continue;
+      ctx.beginPath();ctx.arc(...Object.values(w2s(b.x,b.y)),b.radius*zoom*3.5,0,Math.PI*2);
+      ctx.strokeStyle='rgba(255,255,255,.05)';ctx.lineWidth=1;ctx.stroke();
     }
   }
 
-  function flashCollision() {
-    const el = document.getElementById('collision-flash');
-    el.classList.add('flash');
-    setTimeout(() => el.classList.remove('flash'), 150);
-  }
-
-  function step(dt) {
-    const sub = dt / SUBSTEPS;
-    for (let s = 0; s < SUBSTEPS; s++) {
-      computeForces();
-      for (const b of bodies) {
-        b.vx += b.ax * sub;
-        b.vy += b.ay * sub;
-        b.x  += b.vx * sub;
-        b.y  += b.vy * sub;
-        // Trail
-        b.trail.push({ x: b.x, y: b.y });
-        if (b.trail.length > TRAIL_LENGTH) b.trail.shift();
-      }
-      checkCollisions();
-    }
-    simTime += dt;
-  }
-
-  function render() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Space background gradient
-    const grad = ctx.createRadialGradient(canvas.width/2, canvas.height/2, 0, canvas.width/2, canvas.height/2, Math.max(canvas.width,canvas.height)/1.5);
-    grad.addColorStop(0, '#050d1a');
-    grad.addColorStop(1, '#010308');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.save();
-
-    // Trails
-    if (showTrail) {
-      for (const b of bodies) {
-        if (b.trail.length < 2) continue;
-        ctx.beginPath();
-        for (let i = 0; i < b.trail.length; i++) {
-          const s = worldToScreen(b.trail[i].x, b.trail[i].y);
-          if (i === 0) ctx.moveTo(s.x, s.y);
-          else ctx.lineTo(s.x, s.y);
-        }
-        const alpha = 0.5;
-        const hex = b.color;
-        const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), bl = parseInt(hex.slice(5,7),16);
-        const trailGrad = ctx.createLinearGradient(
-          worldToScreen(b.trail[0].x, b.trail[0].y).x,
-          worldToScreen(b.trail[0].y, b.trail[0].y).y,
-          worldToScreen(b.trail[b.trail.length-1].x, b.trail[b.trail.length-1].y).x,
-          worldToScreen(b.trail[b.trail.length-1].x, b.trail[b.trail.length-1].y).y
-        );
-        trailGrad.addColorStop(0, `rgba(${r},${g},${bl},0)`);
-        trailGrad.addColorStop(1, `rgba(${r},${g},${bl},0.4)`);
-        ctx.strokeStyle = trailGrad;
-        ctx.lineWidth = 1.5 / zoom;
-        ctx.stroke();
-      }
-    }
-
-    // Force vectors
-    if (showForce) {
-      for (const b of bodies) {
-        computeForces();
-        const s = worldToScreen(b.x, b.y);
-        const scale = 300;
-        const ex = s.x + b.ax * scale;
-        const ey = s.y + b.ay * scale;
-        drawArrow(ctx, s.x, s.y, ex, ey, '#ff6b35', 2);
-      }
-    }
-
-    // Velocity vectors
-    if (showVel) {
-      for (const b of bodies) {
-        const s = worldToScreen(b.x, b.y);
-        const scale = 1.2;
-        const ex = s.x + b.vx * scale;
-        const ey = s.y + b.vy * scale;
-        drawArrow(ctx, s.x, s.y, ex, ey, '#00e676', 2);
-      }
-    }
-
-    // Bodies
-    for (const b of bodies) {
-      const s = worldToScreen(b.x, b.y);
-      const sr = b.radius * zoom;
-      const isSelected = selectedBody === b;
-
-      // Selection ring
-      if (isSelected) {
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, sr + 6, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(255,255,255,0.6)';
-        ctx.lineWidth = 1.5;
-        ctx.setLineDash([5, 5]);
-        ctx.stroke();
-        ctx.setLineDash([]);
-        // Glow
-        const glowGrad = ctx.createRadialGradient(s.x, s.y, sr, s.x, s.y, sr * 3);
-        const r = parseInt(b.color.slice(1,3),16), g = parseInt(b.color.slice(3,5),16), bl = parseInt(b.color.slice(5,7),16);
-        glowGrad.addColorStop(0, `rgba(${r},${g},${bl},0.3)`);
-        glowGrad.addColorStop(1, `rgba(${r},${g},${bl},0)`);
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, sr * 3, 0, Math.PI * 2);
-        ctx.fillStyle = glowGrad;
-        ctx.fill();
-      }
-
-      // Body glow
-      const glowGrad = ctx.createRadialGradient(s.x, s.y, sr * 0.5, s.x, s.y, sr * 2);
-      const r = parseInt(b.color.slice(1,3)||'0',16), g2 = parseInt(b.color.slice(3,5)||'0',16), bl2 = parseInt(b.color.slice(5,7)||'0',16);
-      glowGrad.addColorStop(0, `rgba(${r},${g2},${bl2},0.15)`);
-      glowGrad.addColorStop(1, `rgba(${r},${g2},${bl2},0)`);
+  // Trails
+  if(showTrail){
+    for(const b of bodies){
+      if(b.trail.length<2)continue;
+      const [r,g,bl]=hex2rgb(b.color);
       ctx.beginPath();
-      ctx.arc(s.x, s.y, sr * 2, 0, Math.PI * 2);
-      ctx.fillStyle = glowGrad;
-      ctx.fill();
-
-      // Planet gradient
-      const bodyGrad = ctx.createRadialGradient(s.x - sr*0.3, s.y - sr*0.3, 0, s.x, s.y, sr);
-      bodyGrad.addColorStop(0, lightenColor(b.color, 60));
-      bodyGrad.addColorStop(0.4, b.color);
-      bodyGrad.addColorStop(1, darkenColor(b.color, 60));
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, sr, 0, Math.PI * 2);
-      ctx.fillStyle = bodyGrad;
-      ctx.fill();
-
-      // Specular highlight
-      ctx.beginPath();
-      ctx.arc(s.x - sr*0.3, s.y - sr*0.3, sr * 0.25, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255,255,255,0.25)';
-      ctx.fill();
-
-      // Label
-      if (showLabels) {
-        ctx.font = `${Math.max(10, 12 / zoom)}px 'Space Mono', monospace`;
-        ctx.fillStyle = 'rgba(200,220,255,0.85)';
-        ctx.textAlign = 'center';
-        ctx.fillText(b.name, s.x, s.y - sr - 8 / zoom);
+      for(let i=0;i<b.trail.length;i++){
+        const s=w2s(b.trail[i].x,b.trail[i].y);
+        const alpha=(i/b.trail.length)*.55;
+        if(i===0){ctx.moveTo(s.x,s.y);continue}
+        // Draw segment with fading alpha
+        const ps=w2s(b.trail[i-1].x,b.trail[i-1].y);
+        ctx.beginPath();
+        ctx.moveTo(ps.x,ps.y);ctx.lineTo(s.x,s.y);
+        ctx.strokeStyle=`rgba(${r},${g},${bl},${alpha})`;
+        ctx.lineWidth=Math.max(.8,1.8/zoom);ctx.stroke();
       }
     }
-
-    ctx.restore();
   }
 
-  function drawArrow(ctx, x1, y1, x2, y2, color, lw) {
-    const dx = x2 - x1, dy = y2 - y1;
-    const len = Math.sqrt(dx*dx + dy*dy);
-    if (len < 5) return;
-    const ux = dx/len, uy = dy/len;
-    const hw = 6, hl = 10;
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2 - ux*hl, y2 - uy*hl);
-    ctx.strokeStyle = color;
-    ctx.lineWidth = lw;
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x2, y2);
-    ctx.lineTo(x2 - ux*hl - uy*hw, y2 - uy*hl + ux*hw);
-    ctx.lineTo(x2 - ux*hl + uy*hw, y2 - uy*hl - ux*hw);
-    ctx.closePath();
-    ctx.fillStyle = color;
-    ctx.fill();
-  }
+  // Force vectors
+  if(showForce){forces();for(const b of bodies){const s=w2s(b.x,b.y);arrow(ctx,s.x,s.y,s.x+b.ax*400,s.y+b.ay*400,'#ff7030',2.5)}}
 
-  function lightenColor(hex, amt) {
-    const r = Math.min(255, parseInt(hex.slice(1,3)||'aa',16) + amt);
-    const g = Math.min(255, parseInt(hex.slice(3,5)||'aa',16) + amt);
-    const b = Math.min(255, parseInt(hex.slice(5,7)||'aa',16) + amt);
-    return `rgb(${r},${g},${b})`;
-  }
-  function darkenColor(hex, amt) {
-    const r = Math.max(0, parseInt(hex.slice(1,3)||'aa',16) - amt);
-    const g = Math.max(0, parseInt(hex.slice(3,5)||'aa',16) - amt);
-    const b = Math.max(0, parseInt(hex.slice(5,7)||'aa',16) - amt);
-    return `rgb(${r},${g},${b})`;
-  }
+  // Velocity vectors
+  if(showVel){for(const b of bodies){const s=w2s(b.x,b.y);arrow(ctx,s.x,s.y,s.x+b.vx*1.3,s.y+b.vy*1.3,'#4fffb0',2.5)}}
 
-  function loop(ts) {
-    if (!running) return;
-    if (lastTime === null) lastTime = ts;
-    let dt = (ts - lastTime) / 1000 * speed;
-    lastTime = ts;
-    dt = Math.min(dt, 0.05); // cap delta time
-    step(dt);
-    render();
-    updateUI();
-    animId = requestAnimationFrame(loop);
-  }
-
-  function startSim() {
-    if (running) return;
-    running = true;
-    lastTime = null;
-    animId = requestAnimationFrame(loop);
-    updateStatus(true);
-  }
-
-  function pauseSim() {
-    running = false;
-    lastTime = null;
-    if (animId) cancelAnimationFrame(animId);
-    render();
-    updateStatus(false);
-  }
-
-  function resetSim() {
-    pauseSim();
-    bodies = [];
-    selectedBody = null;
-    simTime = 0;
-    camX = 0; camY = 0; zoom = 1;
-    render();
-    updateUI();
-    updateStatus(false);
-    showToast('Simulimi u rifillua.');
-  }
-
-  function clearAll() {
-    pauseSim();
-    bodies = [];
-    selectedBody = null;
-    simTime = 0;
-    render();
-    updateUI();
-    showToast('Të gjitha trupat u fshiën.');
-  }
-
-  function updateStatus(isRunning) {
-    const dot = document.getElementById('status-dot');
-    const txt = document.getElementById('status-text');
-    const btn1 = document.getElementById('btn-play');
-    const btn2 = document.getElementById('btn-play2');
-    if (isRunning) {
-      dot.classList.remove('paused');
-      txt.textContent = 'Duke Simuluar';
-      [btn1, btn2].forEach(b => { if(b){ b.textContent = '▶ Duke Simuluar'; b.style.opacity='0.6'; } });
-    } else {
-      dot.classList.add('paused');
-      txt.textContent = 'I Ndaluar';
-      [btn1, btn2].forEach(b => { if(b){ b.textContent = '▶ Nis Simulimin'; b.style.opacity='1'; } });
+  // Drag preview
+  if(dragAdd&&dragAdd.active){
+    const s0=w2s(dragAdd.x,dragAdd.y);
+    const dx=dragAdd.mx-s0.x,dy=dragAdd.my-s0.y;
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    // Draw ghost body
+    const gr=Math.max(4,Math.cbrt(parseFloat(document.getElementById('mmass').value||newMass))*2.6)*zoom;
+    ctx.beginPath();ctx.arc(s0.x,s0.y,gr,0,Math.PI*2);
+    ctx.fillStyle=newColor+'44';ctx.fill();
+    ctx.strokeStyle=newColor+'aa';ctx.lineWidth=1.5;ctx.stroke();
+    // Draw velocity arrow
+    if(dist>5){
+      const velScale=1.8;
+      arrow(ctx,s0.x,s0.y,s0.x+dx*velScale,s0.y+dy*velScale,'#4af0ff',2.5);
+      ctx.font='11px Space Mono,monospace';
+      ctx.fillStyle='rgba(74,240,255,.8)';
+      ctx.textAlign='center';
+      ctx.fillText(`v=${(dist/velScale).toFixed(0)} px/s`,s0.x+dx/2,s0.y+dy/2-8);
     }
   }
 
-  function updateUI() {
-    document.getElementById('sim-time').textContent = `t = ${simTime.toFixed(2)} s`;
-    document.getElementById('stat-count').textContent = bodies.length;
-    const totalMass = bodies.reduce((s, b) => s + b.mass, 0);
-    document.getElementById('stat-total-mass').textContent = totalMass.toFixed(1);
-    const energy = bodies.reduce((s, b) => s + 0.5 * b.mass * (b.vx*b.vx + b.vy*b.vy), 0);
-    document.getElementById('stat-energy').textContent = energy.toFixed(0);
+  // Bodies
+  for(const b of bodies){
+    const s=w2s(b.x,b.y);
+    const sr=b.radius*zoom;
+    const isSel=selected===b;
+    const [r,g,bl]=hex2rgb(b.color);
 
-    // Body list
-    const list = document.getElementById('body-list');
-    if (bodies.length === 0) {
-      list.innerHTML = '<li style="color:var(--text-dim);font-size:0.82rem;padding:0.5rem">Asnjë trup i shtuar ende.</li>';
-    } else {
-      list.innerHTML = bodies.map(b => `
-        <li class="body-item${selectedBody===b?' selected':''}" data-id="${b.id}">
-          <div class="body-dot" style="background:${b.color};box-shadow:0 0 6px ${b.color}"></div>
-          <span class="body-name">${b.name}</span>
-          <span class="body-mass">m=${b.mass.toFixed(0)}</span>
-        </li>
-      `).join('');
-      list.querySelectorAll('.body-item').forEach(item => {
-        item.addEventListener('click', () => {
-          const id = parseInt(item.dataset.id);
-          selectedBody = bodies.find(b => b.id === id) || null;
-          updateUI();
-          if (!running) render();
-        });
-      });
+    // Selection halo
+    if(isSel){
+      ctx.beginPath();ctx.arc(s.x,s.y,sr+7,0,Math.PI*2);
+      ctx.strokeStyle='rgba(255,255,255,.55)';ctx.lineWidth=1.5;
+      ctx.setLineDash([5,5]);ctx.stroke();ctx.setLineDash([]);
+      const hg=ctx.createRadialGradient(s.x,s.y,sr,s.x,s.y,sr*3.5);
+      hg.addColorStop(0,`rgba(${r},${g},${bl},.25)`);hg.addColorStop(1,`rgba(${r},${g},${bl},0)`);
+      ctx.beginPath();ctx.arc(s.x,s.y,sr*3.5,0,Math.PI*2);ctx.fillStyle=hg;ctx.fill();
     }
 
-    // Selected body info
-    const infoEl = document.getElementById('selected-info');
-    const mInfEl = document.getElementById('m-selected-info');
-    if (selectedBody) {
-      const b = selectedBody;
-      const speed2 = Math.sqrt(b.vx*b.vx + b.vy*b.vy);
-      const ke = 0.5 * b.mass * (b.vx*b.vx + b.vy*b.vy);
-      const html = `
-        <div class="info-box">
-          <div class="info-box-title" style="color:${b.color}">${b.name}</div>
-          <div class="info-row"><span>Masa</span><span class="info-row-val" style="color:${b.color}">${b.mass.toFixed(1)}</span></div>
-          <div class="info-row"><span>Pozicioni X</span><span class="info-row-val">${b.x.toFixed(1)}</span></div>
-          <div class="info-row"><span>Pozicioni Y</span><span class="info-row-val">${b.y.toFixed(1)}</span></div>
-          <div class="info-row"><span>Shpejtësia</span><span class="info-row-val">${speed2.toFixed(1)} px/s</span></div>
-          <div class="info-row"><span>Vx</span><span class="info-row-val">${b.vx.toFixed(1)}</span></div>
-          <div class="info-row"><span>Vy</span><span class="info-row-val">${b.vy.toFixed(1)}</span></div>
-          <div class="info-row"><span>En. Kinetike</span><span class="info-row-val">${ke.toFixed(0)}</span></div>
-        </div>
-        <button class="ctrl-btn" style="width:100%;justify-content:center;color:var(--red);border-color:rgba(255,56,96,0.3);margin-top:0.5rem" id="btn-delete-sel">🗑 Fshij Trupin</button>
-      `;
-      infoEl.innerHTML = html;
-      mInfEl.innerHTML = html;
-      document.getElementById('btn-delete-sel')?.addEventListener('click', deleteSelected);
-    } else {
-      const empty = `<div class="no-selection"><div class="no-selection-icon">🌍</div><p>Zgjidh një trup qiellor duke klikuar mbi të</p></div>`;
-      infoEl.innerHTML = empty;
-      mInfEl.innerHTML = empty;
+    // Glow
+    const gg=ctx.createRadialGradient(s.x,s.y,sr*.4,s.x,s.y,sr*2.2);
+    gg.addColorStop(0,`rgba(${r},${g},${bl},.18)`);gg.addColorStop(1,`rgba(${r},${g},${bl},0)`);
+    ctx.beginPath();ctx.arc(s.x,s.y,sr*2.2,0,Math.PI*2);ctx.fillStyle=gg;ctx.fill();
+
+    // Planet sphere
+    const pg=ctx.createRadialGradient(s.x-sr*.3,s.y-sr*.3,0,s.x,s.y,sr);
+    pg.addColorStop(0,lighten(b.color,70));pg.addColorStop(.4,b.color);pg.addColorStop(1,darken(b.color,65));
+    ctx.beginPath();ctx.arc(s.x,s.y,sr,0,Math.PI*2);ctx.fillStyle=pg;ctx.fill();
+
+    // Specular
+    ctx.beginPath();ctx.arc(s.x-sr*.28,s.y-sr*.28,sr*.22,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,.22)';ctx.fill();
+
+    // Label
+    if(showLabels&&sr>3){
+      ctx.font=`${Math.max(10,12/zoom)}px "Space Mono",monospace`;
+      ctx.fillStyle='rgba(200,215,240,.9)';ctx.textAlign='center';
+      ctx.fillText(b.name,s.x,s.y-sr-7/zoom);
     }
 
-    // What's happening
-    const wh = document.getElementById('whats-happening');
-    if (bodies.length === 0) {
-      wh.textContent = 'Ngarko një preset ose shto trupa qiellorë për të filluar.';
-    } else if (!running) {
-      wh.textContent = 'Simulimi është i ndaluar. Klikoni "Nis" për të parë fizikën.';
-    } else if (bodies.length === 1) {
-      wh.textContent = 'Një trup i vetëm lëviz me inercin e tij. Shto të tjerë për efekte gravitacionale!';
-    } else {
-      wh.textContent = `${bodies.length} trupa ndërveprojnë me gravitetin. Vëzhgoni si masat më të mëdha tërheqin ato të vogla!`;
+    // Mass indicator ring for large bodies
+    if(b.mass>500){
+      ctx.beginPath();ctx.arc(s.x,s.y,sr+3/zoom,0,Math.PI*2);
+      ctx.strokeStyle=`rgba(${r},${g},${bl},.35)`;ctx.lineWidth=1.5/zoom;ctx.stroke();
     }
   }
 
-  function deleteSelected() {
-    if (!selectedBody) return;
-    bodies = bodies.filter(b => b !== selectedBody);
-    selectedBody = null;
-    render();
-    updateUI();
-    showToast('Trupi u fshi.');
+  ctx.restore();
+}
+
+function arrow(ctx,x1,y1,x2,y2,col,lw){
+  const dx=x2-x1,dy=y2-y1,len=Math.sqrt(dx*dx+dy*dy);
+  if(len<6)return;
+  const ux=dx/len,uy=dy/len,hw=6,hl=11;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2-ux*hl,y2-uy*hl);
+  ctx.strokeStyle=col;ctx.lineWidth=lw;ctx.stroke();
+  ctx.beginPath();ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-ux*hl-uy*hw,y2-uy*hl+ux*hw);
+  ctx.lineTo(x2-ux*hl+uy*hw,y2-uy*hl-ux*hw);
+  ctx.closePath();ctx.fillStyle=col;ctx.fill();
+}
+
+// ─── Sim loop ───
+function loop(ts){
+  if(!running)return;
+  if(!lastTs)lastTs=ts;
+  let dt=Math.min((ts-lastTs)/1000*speed,.05);
+  lastTs=ts;
+  step(dt);render();updateUI();
+  animId=requestAnimationFrame(loop);
+}
+
+function start(){if(running)return;running=true;lastTs=null;animId=requestAnimationFrame(loop);setStatus(true)}
+function pause(){running=false;lastTs=null;if(animId)cancelAnimationFrame(animId);render();setStatus(false)}
+function reset(){
+  pause();bodies=[];selected=null;simTime=0;camX=0;camY=0;zoom=1;
+  render();updateUI();toast('Simulimi u rifillua.');
+}
+function clearAll(){pause();bodies=[];selected=null;simTime=0;render();updateUI();toast('Trupat u fshiën.')}
+
+function setStatus(on){
+  document.getElementById('hdot').className='hud-dot'+(on?'':' off');
+  document.getElementById('htxt').textContent=on?'Duke Simuluar':'I Ndaluar';
+  ['bp','bp2'].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent=on?'▶ Duke Simuluar':'▶ Nis';el.style.opacity=on?'.6':'1'}});
+}
+
+// ─── Pointer helpers ───
+function getPos(e){
+  const r=canvas.getBoundingClientRect();
+  const cx=e.touches?e.touches[0].clientX:e.clientX;
+  const cy=e.touches?e.touches[0].clientY:e.clientY;
+  return{x:cx-r.left,y:cy-r.top};
+}
+function hitTest(sx,sy){
+  for(let i=bodies.length-1;i>=0;i--){
+    const b=bodies[i];const s=w2s(b.x,b.y);const sr=b.radius*zoom+4;
+    const dx=sx-s.x,dy=sy-s.y;
+    if(dx*dx+dy*dy<=sr*sr)return b;
+  }
+  return null;
+}
+
+// ─── Drag interactions ───
+canvas.addEventListener('mousedown',e=>{
+  const p=getPos(e);
+  const hit=hitTest(p.x,p.y);
+  if(hit){
+    // Select + start drag-move
+    selected=hit;
+    const s=w2s(hit.x,hit.y);
+    dragMove={body:hit,ox:p.x-s.x,oy:p.y-s.y};
+    if(!running)render();updateUI();
+  } else if(e.button===0){
+    // Start drag-to-add
+    const w=s2w(p.x,p.y);
+    dragAdd={x:w.x,y:w.y,mx:p.x,my:p.y,active:false};
+    canvas.style.cursor='crosshair';
+    document.getElementById('lhint').classList.add('show');
+  }
+});
+
+canvas.addEventListener('mousemove',e=>{
+  const p=getPos(e);
+  if(dragMove){
+    const w=s2w(p.x-dragMove.ox,p.y-dragMove.oy);
+    dragMove.body.x=w.x;dragMove.body.y=w.y;
+    dragMove.body.vx=0;dragMove.body.vy=0;dragMove.body.trail=[];
+    if(!running)render();updateUI();
+  } else if(dragAdd){
+    dragAdd.mx=p.x;dragAdd.my=p.y;
+    const dx=p.x-w2s(dragAdd.x,dragAdd.y).x,dy=p.y-w2s(dragAdd.x,dragAdd.y).y;
+    if(Math.sqrt(dx*dx+dy*dy)>8)dragAdd.active=true;
+    if(!running)render();
+    render(); // always render during drag preview
+  } else if(pan){
+    camX=pan.cx+(p.x-pan.sx)/zoom;
+    camY=pan.cy+(p.y-pan.sy)/zoom;
+    if(!running)render();
+  }
+});
+
+canvas.addEventListener('mouseup',e=>{
+  document.getElementById('lhint').classList.remove('show');
+  if(dragMove){dragMove=null;return}
+  if(dragAdd){
+    const s0=w2s(dragAdd.x,dragAdd.y);
+    const dx=(dragAdd.mx-s0.x),dy=(dragAdd.my-s0.y);
+    const velScale=1.8;
+    const mass=parseFloat(document.getElementById('mmass').value)||newMass;
+    const mname=document.getElementById('mname').value||`Trup ${bodyId+1}`;
+    const b=mkBody(dragAdd.x,dragAdd.y,mass,dx/velScale,dy/velScale,modalColor,mname,parseFloat(document.getElementById('rsl').value)||newRadius);
+    bodies.push(b);selected=b;
+    dragAdd=null;
+    if(!running)render();updateUI();toast(`"${b.name}" u shtua!`);
+  }
+  if(pan){pan=null;canvas.style.cursor='crosshair'}
+});
+
+canvas.addEventListener('click',e=>{
+  if(dragMove||dragAdd)return;
+  const p=getPos(e);
+  const hit=hitTest(p.x,p.y);
+  if(!hit){selected=null;updateUI();if(!running)render()}
+});
+
+canvas.addEventListener('dblclick',e=>{
+  const p=getPos(e);
+  const hit=hitTest(p.x,p.y);
+  if(!hit){
+    const w=s2w(p.x,p.y);
+    quickSpawn(w.x,w.y);
+  }
+});
+
+function quickSpawn(wx,wy){
+  let vx=0,vy=0;
+  if(bodies.length>0){
+    const big=bodies.reduce((a,b)=>a.mass>b.mass?a:b);
+    const dx=wx-big.x,dy=wy-big.y,r=Math.sqrt(dx*dx+dy*dy)||1;
+    const v=Math.sqrt(G*big.mass/r)*.9;
+    vx=-dy/r*v;vy=dx/r*v;
+  }
+  const b=mkBody(wx,wy,newMass,vx,vy,newColor,`Trup ${bodyId+1}`,newRadius);
+  bodies.push(b);selected=b;
+  if(!running)render();updateUI();toast(`Trup i ri i shtuar!`);
+}
+
+// Zoom
+canvas.addEventListener('wheel',e=>{
+  e.preventDefault();
+  const f=e.deltaY<0?1.12:.88;
+  zoom=Math.max(.08,Math.min(12,zoom*f));
+  if(!running)render();
+},{passive:false});
+
+// Touch pan
+let t0=null;
+canvas.addEventListener('touchstart',e=>{
+  const p=getPos(e);
+  const hit=hitTest(p.x,p.y);
+  if(hit){selected=hit;dragMove={body:hit,ox:p.x-w2s(hit.x,hit.y).x,oy:p.y-w2s(hit.x,hit.y).y};updateUI();}
+  else{pan={sx:p.x,sy:p.y,cx:camX,cy:camY}}
+},{passive:true});
+canvas.addEventListener('touchmove',e=>{
+  const p=getPos(e);
+  if(dragMove){const w=s2w(p.x-dragMove.ox,p.y-dragMove.oy);dragMove.body.x=w.x;dragMove.body.y=w.y;dragMove.body.vx=0;dragMove.body.vy=0;dragMove.body.trail=[];if(!running)render();updateUI();}
+  else if(pan){camX=pan.cx+(p.x-pan.sx)/zoom;camY=pan.cy+(p.y-pan.sy)/zoom;if(!running)render();}
+},{passive:true});
+canvas.addEventListener('touchend',()=>{dragMove=null;pan=null});
+
+// ─── Right-click pan ───
+canvas.addEventListener('contextmenu',e=>{e.preventDefault();const p=getPos(e);pan={sx:p.x,sy:p.y,cx:camX,cy:camY}});
+
+// ─── UI update ───
+function updateUI(){
+  document.getElementById('htime').textContent=`t = ${simTime.toFixed(2)} s`;
+  document.getElementById('scount').textContent=bodies.length;
+  const tm=bodies.reduce((s,b)=>s+b.mass,0);
+  document.getElementById('stmass').textContent=tm.toFixed(1);
+  const ke=bodies.reduce((s,b)=>s+.5*b.mass*(b.vx*b.vx+b.vy*b.vy),0);
+  document.getElementById('senergy').textContent=ke.toFixed(0);
+  const px=bodies.reduce((s,b)=>s+b.mass*b.vx,0),py=bodies.reduce((s,b)=>s+b.mass*b.vy,0);
+  document.getElementById('smom').textContent=Math.sqrt(px*px+py*py).toFixed(1);
+
+  // Body list
+  const bl=document.getElementById('blist');
+  bl.innerHTML=bodies.length===0?'<li style="color:var(--textd);font-size:.8rem;padding:.4rem">Asnjë trup ende.</li>':
+    bodies.map(b=>`<li class="bi${selected===b?' sel':''}" data-id="${b.id}"><div class="bdot" style="background:${b.color};box-shadow:0 0 5px ${b.color}"></div><span class="bname">${b.name}</span><span class="bmass">m=${b.mass.toFixed(0)}</span></li>`).join('');
+  bl.querySelectorAll('.bi').forEach(li=>{li.addEventListener('click',()=>{const id=+li.dataset.id;selected=bodies.find(b=>b.id===id)||null;updateUI();if(!running)render()})});
+
+  // Selected info
+  const si=document.getElementById('selinfo'),ms=document.getElementById('mselinfo');
+  if(selected){
+    const b=selected,sp=Math.sqrt(b.vx*b.vx+b.vy*b.vy),ke2=.5*b.mass*sp*sp;
+    const html=`<div class="ibox"><div class="iboxtitle" style="color:${b.color}">${b.name}</div>
+      <div class="irow"><span>Masa</span><span class="ival" style="color:${b.color}">${b.mass.toFixed(1)}</span></div>
+      <div class="irow"><span>Pozicioni X</span><span class="ival">${b.x.toFixed(0)}</span></div>
+      <div class="irow"><span>Pozicioni Y</span><span class="ival">${b.y.toFixed(0)}</span></div>
+      <div class="irow"><span>Shpejtësia</span><span class="ival">${sp.toFixed(1)}</span></div>
+      <div class="irow"><span>Vx</span><span class="ival">${b.vx.toFixed(1)}</span></div>
+      <div class="irow"><span>Vy</span><span class="ival">${b.vy.toFixed(1)}</span></div>
+      <div class="irow"><span>En. Kinetike</span><span class="ival">${ke2.toFixed(0)}</span></div>
+    </div><button class="cb cb-del" style="width:100%;justify-content:center;margin-top:.4rem" id="bdel">🗑 Fshij Trupin</button>`;
+    si.innerHTML=html;ms.innerHTML=html;
+    document.getElementById('bdel')?.addEventListener('click',delSel);
+  } else {
+    const e=`<div class="nosel"><div class="nosel-ico">🌍</div><p>Klikoni mbi një trup qiellor</p></div>`;
+    si.innerHTML=e;ms.innerHTML=e;
   }
 
-  /* ---- Canvas interactions ---- */
-  function getCanvasPos(e) {
-    const rect = canvas.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    return { x: clientX - rect.left, y: clientY - rect.top };
+  // What's happening
+  const wh=document.getElementById('whatshap');
+  if(bodies.length===0)wh.textContent='Ngarko një preset ose shto trupa!';
+  else if(!running)wh.textContent='Simulimi është i ndalur. Shtypni SPACE ose "Nis" për të filluar!';
+  else if(bodies.length===1)wh.textContent='Një trup i vetëm. Shto të tjerë për të parë gravitetin!';
+  else wh.textContent=`${bodies.length} trupa ndërveprojnë! Vëro si masat e mëdha tërheqin ato të vogla.`;
+}
+
+function delSel(){if(!selected)return;bodies=bodies.filter(b=>b!==selected);selected=null;render();updateUI();toast('Trupi u fshi.')}
+
+// ─── Controls ───
+function bind(id,fn){const el=document.getElementById(id);if(el)el.addEventListener('click',fn)}
+bind('bp',start);bind('bp2',start);bind('bpa',pause);bind('br',reset);bind('br2',reset);bind('bclr',clearAll);
+bind('mp',start);bind('mpa',pause);bind('mr',reset);bind('ma',openModal);bind('ba',openModal);bind('ba2',openModal);
+
+document.querySelectorAll('#spbtns .spb').forEach(b=>{
+  b.addEventListener('click',()=>{speed=+b.dataset.s;document.querySelectorAll('#spbtns .spb').forEach(x=>x.classList.remove('on'));b.classList.add('on')});
+});
+
+// Sliders
+const bindSl=(id,lbl,set)=>{const el=document.getElementById(id);if(el)el.addEventListener('input',e=>{document.getElementById(lbl).textContent=e.target.value;set(+e.target.value)})};
+bindSl('gsl','gv',v=>{G=v;document.getElementById('mgsl').value=v;document.getElementById('mgv').textContent=v});
+bindSl('mgsl','mgv',v=>{G=v;document.getElementById('gsl').value=v;document.getElementById('gv').textContent=v});
+bindSl('msl','mv',v=>{newMass=v;document.getElementById('mmsl').value=v;document.getElementById('mmv').textContent=v;document.getElementById('mmass').value=v;document.getElementById('mmassdisp').textContent=v});
+bindSl('mmsl','mmv',v=>{newMass=v;document.getElementById('msl').value=v;document.getElementById('mv').textContent=v;document.getElementById('mmass').value=v;document.getElementById('mmassdisp').textContent=v});
+bindSl('rsl','rv2',v=>newRadius=v);
+
+// Toggles
+document.getElementById('tt').addEventListener('change',e=>{showTrail=e.target.checked;document.getElementById('mt').checked=showTrail});
+document.getElementById('tv').addEventListener('change',e=>{showVel=e.target.checked;document.getElementById('mv2').checked=showVel});
+document.getElementById('tf').addEventListener('change',e=>showForce=e.target.checked);
+document.getElementById('tl').addEventListener('change',e=>showLabels=e.target.checked);
+document.getElementById('tor').addEventListener('change',e=>showOrbit=e.target.checked);
+document.getElementById('mt').addEventListener('change',e=>{showTrail=e.target.checked;document.getElementById('tt').checked=showTrail});
+document.getElementById('mv2').addEventListener('change',e=>{showVel=e.target.checked;document.getElementById('tv').checked=showVel});
+
+// Color pickers
+let modalColor='#4af0ff';
+document.querySelectorAll('#cpick .cdot').forEach(d=>{
+  d.addEventListener('click',()=>{document.querySelectorAll('#cpick .cdot').forEach(x=>x.classList.remove('on'));d.classList.add('on');newColor=d.dataset.c;modalColor=d.dataset.c});
+});
+document.querySelectorAll('#mcp .cdot').forEach(d=>{
+  d.addEventListener('click',()=>{document.querySelectorAll('#mcp .cdot').forEach(x=>x.classList.remove('on'));d.classList.add('on');modalColor=d.dataset.c});
+});
+
+// ─── Modal ───
+function openModal(){document.getElementById('modal').classList.add('open')}
+document.getElementById('mcancel').addEventListener('click',()=>document.getElementById('modal').classList.remove('open'));
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal'))document.getElementById('modal').classList.remove('open')});
+['mmass','mvx','mvy'].forEach(id=>{document.getElementById(id).addEventListener('input',e=>{const d=document.getElementById(id+'disp');if(d)d.textContent=e.target.value})});
+
+document.getElementById('mconfirm').addEventListener('click',()=>{
+  const mass=+document.getElementById('mmass').value;
+  const vx=+document.getElementById('mvx').value;
+  const vy=+document.getElementById('mvy').value;
+  const name=document.getElementById('mname').value||`Trup ${bodyId+1}`;
+  const rad=Math.max(5,Math.cbrt(mass)*2.6);
+  const w=s2w(canvas.width/2+(Math.random()-.5)*160,canvas.height/2+(Math.random()-.5)*160);
+  const b=mkBody(w.x,w.y,mass,vx,vy,modalColor,name,rad);
+  bodies.push(b);selected=b;
+  document.getElementById('modal').classList.remove('open');
+  if(!running)render();updateUI();toast(`"${name}" u shtua!`);
+});
+
+// ─── Mobile tabs ───
+document.querySelectorAll('.mob-tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.mob-tab').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.mob-tc').forEach(x=>x.classList.remove('on'));
+    t.classList.add('on');document.getElementById('tc-'+t.dataset.t).classList.add('on');
+  });
+});
+
+// ─── PRESETS ───
+const PRESETS={
+  solar(){
+    reset();bodies=[];
+    bodies.push(mkBody(0,0,2000,0,0,'#ffd700','Dielli',36));
+    bodies.push(mkBody(200,0,4,0,-216,'#9ca3af','Merkuri',7));
+    bodies.push(mkBody(310,0,10,0,-175,'#fde68a','Venusi',10));
+    bodies.push(mkBody(420,0,12,0,-150,'#60a5fa','Toka',11));
+    bodies.push(mkBody(560,0,6,0,-130,'#fca5a5','Marsi',9));
+    zoom=.78;camX=0;camY=0;selected=null;render();updateUI();toast('Sistemi Diellor u ngarkua!');
+  },
+  'earth-moon'(){
+    reset();bodies=[];
+    bodies.push(mkBody(0,0,500,0,0,'#60a5fa','Toka',22));
+    bodies.push(mkBody(180,0,5,0,-118,'#8090a0','Hëna',8));
+    zoom=1.25;camX=0;camY=0;selected=null;render();updateUI();toast('Tokë-Hënë u ngarkua!');
+  },
+  binary(){
+    reset();bodies=[];
+    bodies.push(mkBody(-140,0,800,0,52,'#ffd700','Yll A',29));
+    bodies.push(mkBody(140,0,700,0,-59,'#fda4af','Yll B',27));
+    zoom=.95;camX=0;camY=0;selected=null;render();updateUI();toast('Sistemi Binar u ngarkua!');
+  },
+  three(){
+    reset();bodies=[];
+    const m=180;
+    bodies.push(mkBody(200,0,m,0,-80,'#a78bfa','Alfa',16));
+    bodies.push(mkBody(-200,0,m,0,80,'#34d399','Beta',16));
+    bodies.push(mkBody(0,0,m,80,0,'#fb923c','Gama',16));
+    zoom=.9;camX=0;camY=0;selected=null;render();updateUI();toast('Tre Trupat u ngarkuan!');
+  },
+  single(){
+    reset();bodies=[];
+    bodies.push(mkBody(0,0,3000,0,0,'#ffd700','Yjsori',42));
+    zoom=1;camX=0;camY=0;selected=null;render();updateUI();toast('Shto planetë duke klikuar e tërhequr!');
+  },
+  galaxy(){
+    reset();bodies=[];
+    const cols=['#ff6b6b','#a29bfe','#55efc4','#fdcb6e','#fd79a8','#74b9ff'];
+    const masses=[200,350,150,280,100,400];
+    for(let i=0;i<6;i++){
+      const a=(i/6)*Math.PI*2,r=140+Math.random()*110;
+      const x=Math.cos(a)*r,y=Math.sin(a)*r;
+      const v=Math.sqrt(G*280/r)*(.75+Math.random()*.5);
+      bodies.push(mkBody(x,y,masses[i],-Math.sin(a)*v*(Math.random()>.5?1:-1),Math.cos(a)*v*(Math.random()>.5?1:-1),cols[i],`Trup ${i+1}`,8+Math.cbrt(masses[i])*1.5));
+    }
+    zoom=.82;camX=0;camY=0;selected=null;render();updateUI();toast('Galaksia u ngarkua!');
   }
+};
 
-  function hitTest(sx, sy) {
-    for (let i = bodies.length - 1; i >= 0; i--) {
-      const b = bodies[i];
-      const s = worldToScreen(b.x, b.y);
-      const sr = b.radius * zoom;
-      const dx = sx - s.x, dy = sy - s.y;
-      if (dx*dx + dy*dy <= (sr+4)*(sr+4)) return b;
-    }
-    return null;
-  }
-
-  canvas.addEventListener('mousedown', e => {
-    const pos = getCanvasPos(e);
-    const hit = hitTest(pos.x, pos.y);
-    if (hit) {
-      if (e.button === 0) {
-        selectedBody = hit;
-        draggingBody = hit;
-        const ws = worldToScreen(hit.x, hit.y);
-        dragOffX = pos.x - ws.x;
-        dragOffY = pos.y - ws.y;
-        if (!running) render();
-        updateUI();
-      }
-    } else if (pendingAddClick) {
-      const w = screenToWorld(pos.x, pos.y);
-      spawnBodyAtWorld(w.x, w.y);
-      pendingAddClick = false;
-      canvas.style.cursor = 'crosshair';
-      showToast(`Trupi u shtua!`);
-    } else if (e.button === 1 || e.altKey) {
-      isPanning = true;
-      panStart = pos;
-      camStart = { x: camX, y: camY };
-      canvas.style.cursor = 'grabbing';
-    } else {
-      selectedBody = null;
-      updateUI();
-      if (!running) render();
-      // Start pan
-      isPanning = true;
-      panStart = pos;
-      camStart = { x: camX, y: camY };
-      canvas.style.cursor = 'grabbing';
-    }
+document.querySelectorAll('.pcard').forEach(card=>{
+  card.addEventListener('click',()=>{
+    const k=card.dataset.p;if(PRESETS[k]){PRESETS[k]();document.getElementById('simulation').scrollIntoView({behavior:'smooth'})}
   });
+});
 
-  canvas.addEventListener('mousemove', e => {
-    const pos = getCanvasPos(e);
-    if (draggingBody) {
-      const w = screenToWorld(pos.x - dragOffX, pos.y - dragOffY);
-      draggingBody.x = w.x; draggingBody.y = w.y;
-      draggingBody.vx = 0; draggingBody.vy = 0;
-      draggingBody.trail = [];
-      if (!running) render();
-      updateUI();
-    } else if (isPanning) {
-      camX = camStart.x + (pos.x - panStart.x) / zoom;
-      camY = camStart.y + (pos.y - panStart.y) / zoom;
-      if (!running) render();
-    }
-  });
+// ─── Toast ───
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2700)}
 
-  canvas.addEventListener('mouseup', e => {
-    draggingBody = null;
-    if (isPanning) {
-      isPanning = false;
-      canvas.style.cursor = pendingAddClick ? 'cell' : 'crosshair';
-    }
-  });
+// ─── Keyboard ───
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT')return;
+  if(e.code==='Space'){e.preventDefault();running?pause():start()}
+  if(e.code==='KeyR')reset();
+  if((e.code==='Delete'||e.code==='Backspace')&&selected)delSel();
+  if(e.code==='Equal'||e.code==='NumpadAdd'){zoom=Math.min(12,zoom*1.15);if(!running)render()}
+  if(e.code==='Minus'||e.code==='NumpadSubtract'){zoom=Math.max(.08,zoom*.86);if(!running)render()}
+});
 
-  canvas.addEventListener('wheel', e => {
-    e.preventDefault();
-    const factor = e.deltaY < 0 ? 1.1 : 0.9;
-    zoom = Math.max(0.1, Math.min(10, zoom * factor));
-    if (!running) render();
-  }, { passive: false });
+// ─── Init ───
+resize();render();updateUI();
+window.addEventListener('resize',()=>{resize();if(!running)render()});
+setTimeout(()=>PRESETS.solar(),500);
 
-  canvas.addEventListener('dblclick', e => {
-    const pos = getCanvasPos(e);
-    const hit = hitTest(pos.x, pos.y);
-    if (!hit) {
-      const w = screenToWorld(pos.x, pos.y);
-      spawnBodyAtWorld(w.x, w.y);
-      showToast('Trup i ri i shtuar!');
-    }
-  });
+// Keep rendering even when paused (for drag preview)
+function alwaysRender(){if(!running)render();requestAnimationFrame(alwaysRender)}
+requestAnimationFrame(alwaysRender);
 
-  function spawnBodyAtWorld(wx, wy) {
-    // Compute a smart initial velocity based on nearest massive body
-    let vx = 0, vy = 0;
-    if (bodies.length > 0) {
-      const massive = bodies.reduce((a, b) => a.mass > b.mass ? a : b);
-      const dx = wx - massive.x, dy = wy - massive.y;
-      const r = Math.sqrt(dx*dx + dy*dy) || 1;
-      const vorb = Math.sqrt(G * massive.mass / r) * 0.85;
-      vx = -dy / r * vorb;
-      vy =  dx / r * vorb;
-    }
-
-    const modalMass = parseFloat(document.getElementById('modal-mass').value);
-    const modalVx   = parseFloat(document.getElementById('modal-vx').value);
-    const modalVy   = parseFloat(document.getElementById('modal-vy').value);
-    const name      = document.getElementById('body-name-input').value || `Trup ${bodyCounter+1}`;
-    const color     = modalColor;
-
-    const b = createBody(wx, wy, modalMass, modalVx, modalVy, color, name, newRadius);
-    bodies.push(b);
-    selectedBody = b;
-    updateUI();
-    if (!running) render();
-  }
-
-  /* ---- Zoom reset on double-click canvas edge ---- */
-
-  /* ---- Controls ---- */
-  function bindBtn(id, fn) {
-    const el = document.getElementById(id);
-    if (el) el.addEventListener('click', fn);
-  }
-
-  bindBtn('btn-play',   startSim);
-  bindBtn('btn-play2',  startSim);
-  bindBtn('btn-pause',  pauseSim);
-  bindBtn('btn-reset',  resetSim);
-  bindBtn('btn-reset2', resetSim);
-  bindBtn('btn-clear',  clearAll);
-  bindBtn('m-play',     startSim);
-  bindBtn('m-pause',    pauseSim);
-  bindBtn('m-reset',    resetSim);
-  bindBtn('m-add',      openModal);
-
-  // Add body buttons
-  bindBtn('btn-add',  openModal);
-  bindBtn('btn-add2', openModal);
-
-  // Speed buttons
-  document.querySelectorAll('.speed-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      speed = parseFloat(btn.dataset.speed);
-      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    });
-  });
-
-  // G slider
-  const gSlider = document.getElementById('g-slider');
-  gSlider.addEventListener('input', () => {
-    G = parseFloat(gSlider.value);
-    document.getElementById('g-val').textContent = G;
-    document.getElementById('m-g-slider').value = G;
-    document.getElementById('m-g-val').textContent = G;
-  });
-  document.getElementById('m-g-slider').addEventListener('input', e => {
-    G = parseFloat(e.target.value);
-    gSlider.value = G;
-    document.getElementById('g-val').textContent = G;
-    document.getElementById('m-g-val').textContent = G;
-  });
-
-  // Mass/radius sliders
-  document.getElementById('mass-slider').addEventListener('input', e => {
-    newMass = parseFloat(e.target.value);
-    document.getElementById('mass-val').textContent = newMass;
-  });
-  document.getElementById('radius-slider').addEventListener('input', e => {
-    newRadius = parseFloat(e.target.value);
-    document.getElementById('radius-val').textContent = newRadius;
-  });
-  document.getElementById('m-mass-slider').addEventListener('input', e => {
-    newMass = parseFloat(e.target.value);
-    document.getElementById('m-mass-val').textContent = newMass;
-    document.getElementById('mass-slider').value = newMass;
-    document.getElementById('mass-val').textContent = newMass;
-  });
-
-  // Toggle switches
-  document.getElementById('toggle-trail').addEventListener('change', e => { showTrail = e.target.checked; });
-  document.getElementById('toggle-vel').addEventListener('change', e => { showVel = e.target.checked; });
-  document.getElementById('toggle-force').addEventListener('change', e => { showForce = e.target.checked; });
-  document.getElementById('toggle-labels').addEventListener('change', e => { showLabels = e.target.checked; });
-  document.getElementById('m-trail').addEventListener('change', e => {
-    showTrail = e.target.checked;
-    document.getElementById('toggle-trail').checked = showTrail;
-  });
-  document.getElementById('m-vel').addEventListener('change', e => {
-    showVel = e.target.checked;
-    document.getElementById('toggle-vel').checked = showVel;
-  });
-
-  // Color pickers
-  let newBodyColor = '#00e5ff';
-  document.querySelectorAll('#color-picker .color-dot').forEach(dot => {
-    dot.addEventListener('click', () => {
-      document.querySelectorAll('#color-picker .color-dot').forEach(d => d.classList.remove('active'));
-      dot.classList.add('active');
-      newBodyColor = dot.dataset.color;
-      newColor = newBodyColor;
-    });
-  });
-
-  /* ---- Modal ---- */
-  let modalColor = '#00e5ff';
-
-  function openModal() {
-    document.getElementById('modal').classList.add('open');
-  }
-
-  document.getElementById('modal-cancel').addEventListener('click', () => {
-    document.getElementById('modal').classList.remove('open');
-  });
-
-  document.getElementById('modal').addEventListener('click', e => {
-    if (e.target === document.getElementById('modal')) {
-      document.getElementById('modal').classList.remove('open');
-    }
-  });
-
-  ['modal-mass','modal-vx','modal-vy'].forEach(id => {
-    document.getElementById(id).addEventListener('input', e => {
-      const disp = document.getElementById(id+'-disp');
-      if (disp) disp.textContent = e.target.value;
-    });
-  });
-
-  document.querySelectorAll('#modal-color-picker .color-dot').forEach(dot => {
-    dot.addEventListener('click', () => {
-      document.querySelectorAll('#modal-color-picker .color-dot').forEach(d => d.classList.remove('active'));
-      dot.classList.add('active');
-      modalColor = dot.dataset.color;
-    });
-  });
-
-  document.getElementById('modal-confirm').addEventListener('click', () => {
-    const mass  = parseFloat(document.getElementById('modal-mass').value);
-    const vx    = parseFloat(document.getElementById('modal-vx').value);
-    const vy    = parseFloat(document.getElementById('modal-vy').value);
-    const name  = document.getElementById('body-name-input').value || `Trup ${bodyCounter+1}`;
-    const radius = Math.max(5, Math.cbrt(mass) * 2.5);
-
-    // Place at center-ish of screen
-    const w = screenToWorld(canvas.width / 2 + (Math.random()-0.5)*200, canvas.height/2 + (Math.random()-0.5)*200);
-    const b = createBody(w.x, w.y, mass, vx, vy, modalColor, name, radius);
-    bodies.push(b);
-    selectedBody = b;
-    document.getElementById('modal').classList.remove('open');
-    if (!running) render();
-    updateUI();
-    showToast(`"${name}" u shtua me sukses!`);
-  });
-
-  /* ---- Mobile tabs ---- */
-  document.querySelectorAll('.mobile-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.mobile-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.mobile-tab-content').forEach(c => c.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
-    });
-  });
-
-  /* ---- Presets ---- */
-  const PRESETS = {
-    solar: () => {
-      resetSim();
-      bodies = [];
-      // Sun
-      bodies.push(createBody(0, 0, 2000, 0, 0, '#ffd700', 'Dielli', 35));
-      // Mercury
-      bodies.push(createBody(200, 0, 5, 0, -210, '#9ca3af', 'Merkuri', 7));
-      // Venus
-      bodies.push(createBody(320, 0, 12, 0, -165, '#fde68a', 'Venusi', 10));
-      // Earth
-      bodies.push(createBody(450, 0, 15, 0, -140, '#60a5fa', 'Toka', 11));
-      // Mars
-      bodies.push(createBody(600, 0, 8, 0, -120, '#fca5a5', 'Marsi', 9));
-      zoom = 0.75; camX = 0; camY = 0;
-      selectedBody = null;
-      render(); updateUI();
-      showToast('Sistemi Diellor u ngarkua!');
-    },
-    'earth-moon': () => {
-      resetSim();
-      bodies = [];
-      bodies.push(createBody(0, 0, 500, 0, 0, '#60a5fa', 'Toka', 22));
-      bodies.push(createBody(180, 0, 6, 0, -115, '#94a3b8', 'Hëna', 8));
-      zoom = 1.2; camX = 0; camY = 0;
-      selectedBody = null;
-      render(); updateUI();
-      showToast('Sistemi Tokë-Hënë u ngarkua!');
-    },
-    binary: () => {
-      resetSim();
-      bodies = [];
-      bodies.push(createBody(-150, 0, 800, 0, 50, '#ffd700', 'Yll A', 28));
-      bodies.push(createBody(150, 0, 700, 0, -57, '#fda4af', 'Yll B', 26));
-      zoom = 0.9; camX = 0; camY = 0;
-      selectedBody = null;
-      render(); updateUI();
-      showToast('Sistemi binar u ngarkua!');
-    },
-    figure8: () => {
-      resetSim();
-      bodies = [];
-      // Classic figure-8 solution (approximate)
-      const m = 200;
-      bodies.push(createBody( 200,  0, m,  0, -80, '#a78bfa', 'Alfa', 16));
-      bodies.push(createBody(-200,  0, m,  0,  80, '#34d399', 'Beta', 16));
-      bodies.push(createBody(   0,  0, m,  80,  0, '#fb923c', 'Gama', 16));
-      zoom = 0.9; camX = 0; camY = 0;
-      selectedBody = null;
-      render(); updateUI();
-      showToast('Tre Trupat u ngarkua!');
-    },
-    single: () => {
-      resetSim();
-      bodies = [];
-      bodies.push(createBody(0, 0, 3000, 0, 0, '#ffd700', 'Yjsori', 40));
-      zoom = 1; camX = 0; camY = 0;
-      selectedBody = null;
-      render(); updateUI();
-      showToast('Ylli i vetëm u ngarkua — shto planetë!');
-    },
-    chaotic: () => {
-      resetSim();
-      bodies = [];
-      const colors = ['#ff6b6b','#a29bfe','#55efc4','#fdcb6e','#fd79a8','#74b9ff'];
-      const masses = [200, 350, 150, 280, 100, 400];
-      for (let i = 0; i < 6; i++) {
-        const angle = (i / 6) * Math.PI * 2;
-        const r = 150 + Math.random() * 100;
-        const x = Math.cos(angle) * r;
-        const y = Math.sin(angle) * r;
-        const vorb = Math.sqrt(G * 300 / r) * (0.7 + Math.random() * 0.6);
-        bodies.push(createBody(x, y, masses[i],
-          -Math.sin(angle) * vorb * (Math.random() > 0.5 ? 1 : -1),
-           Math.cos(angle) * vorb * (Math.random() > 0.5 ? 1 : -1),
-          colors[i], `Trup ${i+1}`, 8 + Math.cbrt(masses[i]) * 1.5));
-      }
-      zoom = 0.8; camX = 0; camY = 0;
-      selectedBody = null;
-      render(); updateUI();
-      showToast('Galaksia e vogël u ngarkua!');
-    }
-  };
-
-  document.querySelectorAll('.preset-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const key = card.dataset.preset;
-      if (PRESETS[key]) {
-        PRESETS[key]();
-        document.getElementById('simulation-section').scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  });
-
-  /* ---- Toast ---- */
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2800);
-  }
-
-  /* ---- Init ---- */
-  resize();
-  render();
-  updateUI();
-
-  window.addEventListener('resize', () => {
-    resize();
-    if (!running) render();
-  });
-
-  // Load solar system on start after brief delay
-  setTimeout(() => {
-    PRESETS.solar();
-  }, 600);
-
-  // Keyboard shortcuts
-  document.addEventListener('keydown', e => {
-    if (e.target.tagName === 'INPUT') return;
-    if (e.code === 'Space') { e.preventDefault(); running ? pauseSim() : startSim(); }
-    if (e.code === 'KeyR') resetSim();
-    if (e.code === 'Delete' && selectedBody) deleteSelected();
-    if (e.code === 'Equal' || e.code === 'NumpadAdd') { zoom *= 1.1; if (!running) render(); }
-    if (e.code === 'Minus' || e.code === 'NumpadSubtract') { zoom *= 0.9; if (!running) render(); }
-  });
-
-})();
-
-/* =============================================
-   EXTRA SCROLL EFFECTS
-============================================= */
-(function() {
-  // Smooth hover on preset cards
-  document.querySelectorAll('.preset-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const cx = rect.width / 2, cy = rect.height / 2;
-      const rotX = (y - cy) / cy * 5;
-      const rotY = (cx - x) / cx * 5;
-      card.style.transform = `translateY(-4px) perspective(600px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-    });
-  });
-
-  // Feature card hover
-  document.querySelectorAll('.feature-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const rect = card.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width;
-      const y = (e.clientY - rect.top) / rect.height;
-      card.style.background = `radial-gradient(ellipse at ${x*100}% ${y*100}%, rgba(0,229,255,0.07) 0%, rgba(8,18,40,0.92) 60%)`;
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.background = '';
-    });
-  });
-
-  // Smooth scroll for nav links
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    });
-  });
 })();
 </script>
 </body>
